@@ -5,15 +5,26 @@
 
 -- DATOS PARA CUENTAS
 
-INSERT INTO cuenta_tipos(
-	"CuentaTipo_Id", "CuentaTipo_Nom")
+INSERT INTO cuenta_tipos (
+    "CuentaTipo_Id", "CuentaTipo_Nom")
 VALUES 
-	(?, ?);
+    (1, 'Activo Corriente'),
+    (2, 'Activo Corriente (Existencias)'),
+    (3, 'Activo No Corriente'),
+    (4, 'Pasivos'),
+    (5, 'Patrimonio'),
+    (6, 'Gastos'),
+    (7, 'Ingreso'),
+    (8, 'Cuentas de Cierre'),
+    (9, 'Cuentas Analíticas de Explotación');
 
-INSERT INTO cuentas(
-	"Cuenta_Id", "Cuenta_CuentaTipoId", "Cuenta_Nom")
+INSERT INTO cuentas (
+    "Cuenta_Id", "Cuenta_CuentaTipoId", "Cuenta_Nom")
 VALUES 
-	(?, ?, ?);
+    (10, 1, 'Efectivo y Equivalentes de Efectivo'),
+    (11, 1, 'Inversiones Financieras'),
+    (12, 1, 'Cuentas Por Cobrar Comerciales – Terceros'),
+    (13, 1, 'Cuentas Por Cobrar Comerciales – Relacionadas');
 	
 
 -- DATOS PARA REGISTROS
@@ -21,7 +32,8 @@ VALUES
 INSERT INTO monedas(
 	"Moneda_Id", "Moneda_Nom", "Moneda_Simb")
 VALUES 
-	(?, ?, ?);
+	(1, 'soles', 'S/.'),
+	(2, 'dólares', '$');
 	
 INSERT INTO registros(
 	"Reg_MonedaId", "Reg_SaldoIncial", "Reg_Fecha")
