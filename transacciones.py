@@ -2,6 +2,7 @@ from tkinter import *
 from tran_guardar import *
 from tran_mostrar import *
 from tkinter.ttk import Combobox
+from tkcalendar import DateEntry
 
 root = Tk()
 root.title("Agregar Transacciones")
@@ -35,7 +36,9 @@ frame.place(relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
 label = Label(frame, text="Fecha")
 label.grid(row=1, column=0)
 
-entry_fecha = Entry(frame)
+entry_fecha = DateEntry(frame, width=12, background="dark gray",
+                        foreground="white", dateformat="%Y-%m-%d",
+                        botderwidth=2, botdercolor="black")
 entry_fecha.grid(row=2, column=0)
 
 
