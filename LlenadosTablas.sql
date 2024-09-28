@@ -38,7 +38,7 @@ VALUES
 INSERT INTO registros(
 	"Reg_MonedaId", "Reg_SaldoIncial", "Reg_Fecha")
 VALUES 
-	(?, ?, ?);
+	(1, 2000, '27/09/24');
 
 
 -- DATOS PARA TRANSACCIONES

@@ -12,3 +12,6 @@ def guardar_transaccion(regId, cuentaId, monto, isAumento, fecha):
     print("Guardado correctamente")
     conn.commit()
     conn.close()
+
+
+    

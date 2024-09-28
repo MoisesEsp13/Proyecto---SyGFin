@@ -23,6 +23,22 @@ def sincronizar_nom(event):
             cmb_cuenta_nom.set(cuenta[1])
             break
 
+def guardar_datos():
+    reg_id = 1
+    cuenta_id = cmb_cuenta_id.get()
+    monto = entry_monto.get()
+    is_aum = True if cmb_is_aum.get() == "+" else False
+    fecha = entry_fecha.get()
+
+    if fecha and cuenta_id and is_aum and monto:
+        try:
+            guardar_transaccion(reg_id, cuenta_id, monto, is_aum, fecha)
+            print("Datos guardados correctamente")
+
+        except Exception as e:
+            print("Error al guardar los datos:", e)
+    else:
+        print("Faltan campos por completar")
 
 # Canva
 canvas = Canvas(root, height=380, width=900)
@@ -63,24 +79,22 @@ cmb_cuenta_nom.bind("<<ComboboxSelected>>", sincronizar_id)
 
 
 # IsAumento
-label = Label(frame, text="+")
-label.grid(row=2, column=3)
+cmb_is_aum = Combobox(frame, width="2", state="readonly", 
+                      values=["+", "-"])
+cmb_is_aum.grid(row=2, column=3)
 
 
-# Debe
-label = Label(frame, text="Debe")
+# Monto
+label = Label(frame, text="Monto")
 label.grid(row=1, column=4)
 
-entry_debe = Entry(frame)
-entry_debe.grid(row=2, column=4)
+entry_monto = Entry(frame)
+entry_monto.grid(row=2, column=4)
 
 
-# Haber
-label = Label(frame, text="Haber")
-label.grid(row=1, column=5)
-
-entry_haber = Entry(frame)
-entry_haber.grid(row=2, column=5)
+# Botón
+btn_guardar = Button(frame, text="Guardar", command=guardar_datos)
+btn_guardar.grid(row=3, column=4, pady=10)
 
 
 root.mainloop()

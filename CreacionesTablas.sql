@@ -37,7 +37,7 @@ CREATE TABLE monedas
 (
 	"Moneda_Id" SMALLINT PRIMARY KEY,
 	"Moneda_Nom" VARCHAR(25),
-	"Moneda_Simb" CHAR(1)
+	"Moneda_Simb" VARCHAR(5)
 );
 
 CREATE TABLE registros
