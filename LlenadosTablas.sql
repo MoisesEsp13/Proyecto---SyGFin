@@ -44,7 +44,7 @@ VALUES
 -- DATOS PARA TRANSACCIONES
 
 INSERT INTO transacciones(
-	"Tran_RegId", "Tran_CuentaId", "Tran_Monto", "Tran_IsAumento", "Tran_Fecha")
+	"Tran_RegId", "Tran_CuentaId", "Tran_MontoDeb", "Tran_MontoCre", "Tran_Fecha")
 VALUES
 	(?, ?, ?, ?, ?);
 

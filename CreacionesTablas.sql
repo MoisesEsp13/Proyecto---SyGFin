@@ -57,8 +57,8 @@ CREATE TABLE transacciones
     "Tran_Id" SERIAL PRIMARY KEY,
 	"Tran_RegId" INTEGER,
 	"Tran_CuentaId" SMALLINT,
-	"Tran_Monto" NUMERIC(15, 2),
-	"Tran_IsAumento" BOOLEAN DEFAULT TRUE,
+	"Tran_MontoDeb" NUMERIC(15, 2) DEFAULT 0,
+	"Tran_MontoCre" NUMERIC(15, 2) DEFAULT 0,
 	"Tran_Fecha" DATE,
 	FOREIGN KEY ("Tran_RegId") REFERENCES registros("Reg_Id"),
 	FOREIGN KEY ("Tran_CuentaId") REFERENCES cuentas("Cuenta_Id")
@@ -72,8 +72,8 @@ CREATE TABLE mayores
     "May_Id" SERIAL PRIMARY KEY,
 	"May_RegId" INTEGER,
 	"May_CuentaId" SMALLINT,
-	"May_MontoDeb" NUMERIC(15, 2),
-	"May_MontoCre" NUMERIC(15, 2),
+	"May_MontoDeb" NUMERIC(15, 2) DEFAULT 0,
+	"May_MontoCre" NUMERIC(15, 2) DEFAULT 0,
 	FOREIGN KEY ("May_RegId") REFERENCES registros("Reg_Id"),
 	FOREIGN KEY ("May_CuentaId") REFERENCES cuentas("Cuenta_Id")
 );
