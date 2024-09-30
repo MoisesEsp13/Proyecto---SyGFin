@@ -20,8 +20,7 @@ def sincronizar_nom(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas):
             cmb_cuenta_nom.set(cuenta[1])
             break
 
-def guardar_datos(cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha):
-    reg_id = 1
+def guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha):
     cuenta_id = cmb_cuenta_id.get()
     monto = entry_monto.get()
     is_aum = True if cmb_is_aum.get() == "+" else False
@@ -104,7 +103,7 @@ def mostrar_ver_registro(root, reg_id):
     cmb_cuenta_nom.bind("<<ComboboxSelected>>", lambda event: sincronizar_id(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas))
 
     # IsAumento
-    cmb_is_aum = ttk.Combobox(frame, width="2", state="readonly", values=["+", "-"])
+    cmb_is_aum = ttk.Combobox(frame, width="3", state="readonly", values=["+", "-"])
     cmb_is_aum.grid(row=2, column=3)
 
     # Monto
@@ -115,7 +114,7 @@ def mostrar_ver_registro(root, reg_id):
     entry_monto.grid(row=2, column=4)
 
     # Botón para guardar
-    btn_guardar = tk.Button(frame, text="Guardar", command=lambda: guardar_datos(cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha))
+    btn_guardar = tk.Button(frame, text="Guardar", command=lambda: guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha))
     btn_guardar.grid(row=3, column=4, pady=10)
 
 
