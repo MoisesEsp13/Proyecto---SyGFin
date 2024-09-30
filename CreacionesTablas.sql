@@ -26,7 +26,7 @@ CREATE TABLE cuentas
 (
 	"Cuenta_Id" SMALLINT PRIMARY KEY,
 	"Cuenta_CuentaTipoId" SMALLINT,
-	"Cuenta_Nom" VARCHAR(70),
+	"Cuenta_Nom" VARCHAR(100),
 	FOREIGN KEY ("Cuenta_CuentaTipoId") REFERENCES cuenta_tipos("CuentaTipo_Id")
 );
 
