@@ -11,12 +11,13 @@ VALUES
     (1, 'Activo Corriente'),
     (2, 'Activo Corriente (Existencias)'),
     (3, 'Activo No Corriente'),
-    (4, 'Pasivos'),
-    (5, 'Patrimonio'),
-    (6, 'Gastos'),
-    (7, 'Ingreso'),
-    (8, 'Cuentas de Cierre'),
-    (9, 'Cuentas Analíticas de Explotación');
+    (4, 'Pasivo Corriente'),
+    (5, 'Pasivo No Corriente'),
+    (6, 'Patrimonio'),
+    (7, 'Gastos'),
+    (8, 'Ingreso'),
+    (9, 'Cuentas de Cierre'),
+    (10, 'Cuentas Analíticas de Explotación');
 
 INSERT INTO cuentas (
     "Cuenta_Id", "Cuenta_CuentaTipoId", "Cuenta_Nom")
