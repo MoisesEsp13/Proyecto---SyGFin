@@ -14,7 +14,8 @@ def conectar_db():
         return None
 
 # Función para obtener los datos del estado de resultados
-def obtener_datos_estado_resultados():
+def obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, gastos_operativos, utilidad_operativa,
+                                    otros_gastos, otros_ingresos, utilidad_antes_impuestos):
     conn = conectar_db()
     if conn is None:
         return
@@ -47,54 +48,52 @@ def obtener_datos_estado_resultados():
     otros_gastos.set(f"S/. {resultado[6] if resultado[6] is not None else 0:,.2f}")
     otros_ingresos.set(f"S/. {resultado[5] if resultado[5] is not None else 0:,.2f}")
     utilidad_antes_impuestos.set(f"S/. {(resultado[0] if resultado[0] is not None else 0) - (resultado[1] if resultado[1] is not None else 0) - (resultado[2] if resultado[2] is not None else 0) - (resultado[3] if resultado[3] is not None else 0) + (resultado[5] if resultado[5] is not None else 0) - (resultado[6] if resultado[6] is not None else 0):,.2f}")
-# Crear la ventana principal de Tkinter
-root = tk.Tk()
-root.title("Estado de Resultados - Sistema Contable")
-root.geometry("800x600")
 
-# Variables para los campos del estado de resultados
-ventas_netas = tk.StringVar()
-costo_ventas = tk.StringVar()
-utilidad_bruta = tk.StringVar()
-gastos_operativos = tk.StringVar()
-utilidad_operativa = tk.StringVar()
-otros_gastos = tk.StringVar()
-otros_ingresos = tk.StringVar()
-utilidad_antes_impuestos = tk.StringVar()
+# Pantalla del estado de resultados
+def abrir_estado_resultados(root, reg_id):
+    # Limpiar la ventana
+    for widget in root.winfo_children():
+        widget.destroy()
 
-# Crear y organizar la interfaz gráfica con etiquetas y campos
-tk.Label(root, text="Estado de Resultados - Periodo", font=("Arial", 16, "bold")).grid(row=0, column=0, columnspan=2)
+    # Variables para los campos del estado de resultados
+    ventas_netas = tk.StringVar()
+    costo_ventas = tk.StringVar()
+    utilidad_bruta = tk.StringVar()
+    gastos_operativos = tk.StringVar()
+    utilidad_operativa = tk.StringVar()
+    otros_gastos = tk.StringVar()
+    otros_ingresos = tk.StringVar()
+    utilidad_antes_impuestos = tk.StringVar()
 
-tk.Label(root, text="Ventas Netas:").grid(row=1, column=0, sticky='e')
-tk.Entry(root, textvariable=ventas_netas, state="readonly").grid(row=1, column=1, padx=5, pady=5)
+    # Crear y organizar la interfaz gráfica
+    tk.Label(root, text="Estado de Resultados - Periodo", font=("Arial", 16, "bold")).grid(row=0, column=0, columnspan=2)
 
-tk.Label(root, text="Costo de la Venta:").grid(row=2, column=0, sticky='e')
-tk.Entry(root, textvariable=costo_ventas, state="readonly").grid(row=2, column=1, padx=5, pady=5)
+    tk.Label(root, text="Ventas Netas:").grid(row=1, column=0, sticky='e')
+    tk.Entry(root, textvariable=ventas_netas, state="readonly").grid(row=1, column=1, padx=5, pady=5)
 
-tk.Label(root, text="Utilidad Bruta:").grid(row=3, column=0, sticky='e')
-tk.Entry(root, textvariable=utilidad_bruta, state="readonly").grid(row=3, column=1, padx=5, pady=5)
+    tk.Label(root, text="Costo de la Venta:").grid(row=2, column=0, sticky='e')
+    tk.Entry(root, textvariable=costo_ventas, state="readonly").grid(row=2, column=1, padx=5, pady=5)
 
-tk.Label(root, text="Gastos Operativos:").grid(row=4, column=0, sticky='e')
-tk.Entry(root, textvariable=gastos_operativos, state="readonly").grid(row=4, column=1, padx=5, pady=5)
+    tk.Label(root, text="Utilidad Bruta:").grid(row=3, column=0, sticky='e')
+    tk.Entry(root, textvariable=utilidad_bruta, state="readonly").grid(row=3, column=1, padx=5, pady=5)
 
-tk.Label(root, text="Utilidad Operativa:").grid(row=5, column=0, sticky='e')
-tk.Entry(root, textvariable=utilidad_operativa, state="readonly").grid(row=5, column=1, padx=5, pady=5)
+    tk.Label(root, text="Gastos Operativos:").grid(row=4, column=0, sticky='e')
+    tk.Entry(root, textvariable=gastos_operativos, state="readonly").grid(row=4, column=1, padx=5, pady=5)
 
-tk.Label(root, text="Otros Gastos:").grid(row=6, column=0, sticky='e')
-tk.Entry(root, textvariable=otros_gastos, state="readonly").grid(row=6, column=1, padx=5, pady=5)
+    tk.Label(root, text="Utilidad Operativa:").grid(row=5, column=0, sticky='e')
+    tk.Entry(root, textvariable=utilidad_operativa, state="readonly").grid(row=5, column=1, padx=5, pady=5)
 
-tk.Label(root, text="Otros Ingresos:").grid(row=7, column=0, sticky='e')
-tk.Entry(root, textvariable=otros_ingresos, state="readonly").grid(row=7, column=1, padx=5, pady=5)
+    tk.Label(root, text="Otros Gastos:").grid(row=6, column=0, sticky='e')
+    tk.Entry(root, textvariable=otros_gastos, state="readonly").grid(row=6, column=1, padx=5, pady=5)
 
-tk.Label(root, text="Utilidad Antes de Impuestos:").grid(row=8, column=0, sticky='e')
-tk.Entry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row=8, column=1, padx=5, pady=5)
+    tk.Label(root, text="Otros Ingresos:").grid(row=7, column=0, sticky='e')
+    tk.Entry(root, textvariable=otros_ingresos, state="readonly").grid(row=7, column=1, padx=5, pady=5)
 
-# Botón para cargar datos
-tk.Button(root, text="Cargar Estado de Resultados", command=obtener_datos_estado_resultados).grid(row=9, column=0, columnspan=2, pady=10)
+    tk.Label(root, text="Utilidad Antes de Impuestos:").grid(row=8, column=0, sticky='e')
+    tk.Entry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row=8, column=1, padx=5, pady=5)
 
-# Botón para regresar
-btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
-btn_guardar.pack(pady=10)
+    # Botón para cargar datos
+    tk.Button(root, text="Cargar Estado de Resultados", command=lambda: obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, gastos_operativos, utilidad_operativa, otros_gastos, otros_ingresos, utilidad_antes_impuestos)).grid(row=9, column=0, columnspan=2, pady=10)
 
-# Iniciar la aplicación de Tkinter
-root.mainloop()
+    # Botón para regresar
+    tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'ver_registro', reg_id)).grid(row=10, column=0, columnspan=2, pady=10)
