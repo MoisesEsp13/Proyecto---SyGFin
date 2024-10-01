@@ -21,9 +21,10 @@ def mostrar_crear_registro(root):
     titulo.pack(pady=10)
 
     # Moneda
+    monedas = {"Soles S/.": 1, "Dólares $": 2}
     label_moneda = tk.Label(root, text="Moneda")
     label_moneda.pack()
-    cmb_moneda = ttk.Combobox(root, values=[("Soles", 1), ("Dólares", 2)], state="readonly")
+    cmb_moneda = ttk.Combobox(root, values=list(monedas.keys()), state="readonly")
     cmb_moneda.pack()
 
     # Saldo inicial
@@ -33,7 +34,7 @@ def mostrar_crear_registro(root):
     entry_saldo.pack()
 
     # Botón para guardar
-    btn_guardar = tk.Button(root, text="Guardar", command=lambda: guardar_registro(cmb_moneda.get().split()[1], entry_saldo.get()))
+    btn_guardar = tk.Button(root, text="Guardar", command=lambda: guardar_registro(monedas[cmb_moneda.get()], entry_saldo.get()))
     btn_guardar.pack(pady=10)
 
     # Botón para regresar
