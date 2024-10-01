@@ -25,3 +25,6 @@ def cambiar_pantalla(root, pantalla, *args):
     elif pantalla == 'situacion_financiera':
         from estados_financieros import mostrar_situacion_financiera
         mostrar_situacion_financiera(root, *args)  # args contiene el registro para mostrar estados financieros
+    elif pantalla == 'estado_resultados':
+        from Estado_Resultados import abrir_estado_resultados
+        abrir_estado_resultados(root, *args)
