@@ -16,7 +16,7 @@ def obtener_anios():
     conn.close()
     return [anio[0] for anio in anios]
 
-def obtener_transacciones(anio):
+def obtener_transacciones(anio,tipo):
     conn = conectar_db()
     cur = conn.cursor()
     cur.execute(""" 
@@ -24,10 +24,10 @@ def obtener_transacciones(anio):
                SUM(t."Tran_MontoDeb") + SUM(t."Tran_MontoCre") as Monto
         FROM transacciones t
         JOIN cuentas c ON t."Tran_CuentaId" = c."Cuenta_Id"
-        WHERE EXTRACT(YEAR FROM t."Tran_Fecha") = %s
+        WHERE EXTRACT(YEAR FROM t."Tran_Fecha") = %s AND c."Cuenta_CuentaTipoId" = %s
         GROUP BY c."Cuenta_CuentaTipoId", c."Cuenta_Id", c."Cuenta_Nom"
         ORDER BY c."Cuenta_Id", c."Cuenta_Nom"
-    """, (anio,))  # Aquí se corrige la colocación de la tupla
+    """, (anio,tipo,))  # Aquí se corrige la colocación de la tupla
     transacciones = cur.fetchall()
     cur.close()
     conn.close()
@@ -49,9 +49,12 @@ def mostrar_situacion_financiera(root,reg_id):
     titulo = tk.Label(root, text=f"Situacion financiera", font=("Helvetica", 16))
     titulo.pack(pady=10)
 
+    tipos = [2,3,4,5]
+    anio =2024
+
     # Tabla de transacciones
-    for anio in anios:
-        transacciones = obtener_transacciones(anio)
+    for tipo in tipos:
+        transacciones = obtener_transacciones(anio,tipo)
         tabla = ttk.Treeview(root, columns=("Tipo", "Nota", "Cuenta", "Monto"), show="headings")
         tabla.heading("Tipo", text="Tipo")
         tabla.heading("Nota", text="Nota")
@@ -61,5 +64,10 @@ def mostrar_situacion_financiera(root,reg_id):
         for trans in transacciones:
             tabla.insert("", "end", values=trans)
         tabla.pack(pady=10)
+
+
+    # Botón para regresar
+    btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
+    btn_guardar.pack(pady=10)
     
 
