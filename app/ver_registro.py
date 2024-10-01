@@ -80,7 +80,7 @@ def mostrar_ver_registro(root, reg_id):
     label_fecha.grid(row=1, column=0)
 
     entry_fecha = DateEntry(frame, width=12, background="dark gray",
-                            foreground="white", dateformat="%Y-%m-%d",
+                            foreground="white", date_pattern="d/M/yy",
                             borderwidth=2)
     entry_fecha.grid(row=2, column=0)
 

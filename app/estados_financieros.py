@@ -93,7 +93,6 @@ def mostrar_situacion_financiera(root, regid):
                    "SitFin_TotalPasCorr", "SitFin_TotalPasNoCorr", "SitFin_TotalPas",
                    "SitFin_TotalPatrimonio"
             FROM situacion_financiera
-            WHERE "SitFin_RegId" = %s
             ORDER BY "SitFin_Id" DESC
             LIMIT 1;
         """, (regid,))
