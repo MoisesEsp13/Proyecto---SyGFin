@@ -51,6 +51,11 @@ def mostrar_ver_registro(root, reg_id):
                                          command=lambda: cambiar_pantalla(root, 'situacion_financiera', reg_id))
     btn_situacion_financiera.pack(side=tk.LEFT, padx=10)
 
+    # Botón para abrir el estado de resultados
+    btn_estado_resultados = tk.Button(root, text="Ver Estado de Resultados",
+                                      command=lambda: cambiar_pantalla(root, 'estado_resultados', reg_id))
+    btn_estado_resultados.pack(side=tk.LEFT, padx=10)
+
     # Botón para regresar
     btn_regresar = tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'bienvenida'))
     btn_regresar.pack(side=tk.LEFT, padx=10)
@@ -93,7 +98,7 @@ def agregar_transaccion(root, reg_id, tabla):
     label_fecha.grid(row=1, column=0)
 
     entry_fecha = DateEntry(frame, width=12, background="dark gray",
-                            foreground="white", date_pattern="d/M/yy",
+                            foreground="white", date_pattern="yyyy-mm-dd",
                             borderwidth=2)
     entry_fecha.grid(row=2, column=0)
 
