@@ -1,6 +1,7 @@
 import psycopg2
 import tkinter as tk
 from tkinter import ttk
+from navegacion import cambiar_pantalla
 
 # Función para conectar a la base de datos
 def conectar_db():
@@ -90,6 +91,10 @@ tk.Entry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row
 
 # Botón para cargar datos
 tk.Button(root, text="Cargar Estado de Resultados", command=obtener_datos_estado_resultados).grid(row=9, column=0, columnspan=2, pady=10)
+
+# Botón para regresar
+btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
+btn_guardar.pack(pady=10)
 
 # Iniciar la aplicación de Tkinter
 root.mainloop()
