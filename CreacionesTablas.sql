@@ -78,26 +78,6 @@ CREATE TABLE mayores
 	FOREIGN KEY ("May_CuentaId") REFERENCES cuentas("Cuenta_Id")
 );
 
-
--- TABLAS PARA ESTADO DE SITUACIÓN FINANCIERA
-
-CREATE TABLE situacion_financiera
-(
-    "SitFin_Id" SERIAL PRIMARY KEY,
-	"SitFin_RegId" INTEGER,
-	"SitFin_TotalActCorr" NUMERIC(15, 2),
-	"SitFin_TotalActNoCorr" NUMERIC(15, 2),
-	"SitFin_TotalAct" NUMERIC(15, 2),
-	"SitFin_TotalPasCorr" NUMERIC(15, 2),
-	"SitFin_TotalPasNoCorr" NUMERIC(15, 2),
-	"SitFin_TotalPas" NUMERIC(15, 2),
-	"SitFin_TotalPatrimonio" NUMERIC(15, 2),
-	FOREIGN KEY ("SitFin_RegId") REFERENCES registros("Reg_Id")
-);
-
-
-
-
 -- TABLAS PARA ESTADO DE RESULTADO
 
 CREATE TABLE estado_resultados
