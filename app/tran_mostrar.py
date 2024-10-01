@@ -1,6 +1,8 @@
-import psycopg2
+import tkinter as tk
+from tkinter import ttk
+from tran_guardar import *
 from conexion import conectar_db
-
+from tkcalendar import DateEntry
 
 def obtener_cuentas():
     conn = conectar_db()

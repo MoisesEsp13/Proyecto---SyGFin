@@ -1,40 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from tran_guardar import *
 from tran_mostrar import *
 from navegacion import cambiar_pantalla
 from conexion import conectar_db
 from tkcalendar import DateEntry
-
-def sincronizar_id(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas):
-    nombre_seleccionado = cmb_cuenta_nom.get()
-    for cuenta in cuentas:
-        if cuenta[1] == nombre_seleccionado:
-            cmb_cuenta_id.set(cuenta[0])
-            break
-
-def sincronizar_nom(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas):
-    id_seleccionado = cmb_cuenta_id.get()
-    for cuenta in cuentas:
-        if str(cuenta[0]) == id_seleccionado:
-            cmb_cuenta_nom.set(cuenta[1])
-            break
-
-def guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha):
-    cuenta_id = cmb_cuenta_id.get()
-    monto = entry_monto.get()
-    is_aum = True if cmb_is_aum.get() == "+" else False
-    fecha = entry_fecha.get()
-
-    if fecha and cuenta_id and is_aum and monto:
-        try:
-            guardar_transaccion(reg_id, cuenta_id, monto, is_aum, fecha)
-            print("Datos guardados correctamente")
-
-        except Exception as e:
-            print("Error al guardar los datos:", e)
-    else:
-        print("Faltan campos por completar")
 
 
 def obtener_transacciones(reg_id):
@@ -72,6 +41,50 @@ def mostrar_ver_registro(root, reg_id):
     tabla.pack(pady=10)
     
     # Adiccionar transacciones
+    agregar_transaccion(root, reg_id, tabla)
+
+    # Botones
+    btn_mayores = tk.Button(root, text="Mostrar Mayores", command=lambda: cambiar_pantalla(root, 'mayores', reg_id))
+    btn_mayores.pack(side=tk.LEFT, padx=10)
+
+    btn_situacion_financiera = tk.Button(root, text="Mostrar Estados Financieros",
+                                         command=lambda: cambiar_pantalla(root, 'situacion_financiera', reg_id))
+    btn_situacion_financiera.pack(side=tk.LEFT, padx=10)
+
+    # Botón para regresar
+    btn_regresar = tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'bienvenida'))
+    btn_regresar.pack(side=tk.LEFT, padx=10)
+
+
+def guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, tabla):
+    cuenta_id = cmb_cuenta_id.get()
+    monto = entry_monto.get()
+    is_aum = cmb_is_aum.get()
+    fecha = entry_fecha.get()
+
+    if fecha and cuenta_id and is_aum and monto:
+        try:
+            is_aum_bool = True if is_aum == "+" else False
+            guardar_transaccion(reg_id, cuenta_id, monto, is_aum_bool, fecha)
+            print("Datos enviados correctamente")
+
+            # Vaciar la tabla actual
+            for item in tabla.get_children():
+                tabla.delete(item)
+
+            # Obtener transacciones actualizadas y mostrarlas
+            transacciones = obtener_transacciones(reg_id)
+            for trans in transacciones:
+                tabla.insert("", "end", values=trans)
+
+        except Exception as e:
+            print("Error al guardar los datos:", e)
+    else:
+        print("Faltan campos por completar")
+
+
+def agregar_transaccion(root, reg_id, tabla):
+    
     frame = tk.Frame(root)
     frame.pack(pady=10)
 
@@ -114,20 +127,5 @@ def mostrar_ver_registro(root, reg_id):
     entry_monto.grid(row=2, column=4)
 
     # Botón para guardar
-    btn_guardar = tk.Button(frame, text="Guardar", command=lambda: guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha))
+    btn_guardar = tk.Button(frame, text="Guardar", command=lambda: guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, tabla))
     btn_guardar.grid(row=3, column=4, pady=10)
-
-
-
-    # Botones
-    btn_mayores = tk.Button(root, text="Mostrar Mayores", command=lambda: cambiar_pantalla(root, 'mayores', reg_id))
-    btn_mayores.pack(side=tk.LEFT, padx=10)
-
-    btn_situacion_financiera = tk.Button(root, text="Mostrar Estados Financieros",
-                                         command=lambda: cambiar_pantalla(root, 'situacion_financiera', reg_id))
-    btn_situacion_financiera.pack(side=tk.LEFT, padx=10)
-
-    # Botón para regresar
-    btn_regresar = tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'bienvenida'))
-    btn_regresar.pack(side=tk.LEFT, padx=10)
-
