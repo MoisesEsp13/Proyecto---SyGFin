@@ -1,6 +1,21 @@
 import psycopg2
 from conexion import conectar_db
 
+
+def obtener_transacciones(reg_id):
+    conn = conectar_db()
+    cursor = conn.cursor()
+    query = '''SELECT t."Tran_Fecha", c."Cuenta_Nom", t."Tran_MontoDeb", t."Tran_MontoCre"
+               FROM transacciones t
+               JOIN cuentas c ON t."Tran_CuentaId" = c."Cuenta_Id"
+               WHERE t."Tran_RegId" = %s
+               ORDER BY t."Tran_Fecha"'''
+    cursor.execute(query, (reg_id,))
+    transacciones = cursor.fetchall()
+    conn.close()
+    return transacciones
+
+
 def obtener_tipos_cuenta():
     conn = conectar_db()
     cursor = conn.cursor()
