@@ -14,15 +14,14 @@ def obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, 
     cur = conn.cursor()
     cur.execute("""
         SELECT 
-            SUM(CASE WHEN c."Cuenta_Id" = 70 THEN t."Tran_MontoCre" ELSE 0 END) AS "VentasNetas",
-            SUM(CASE WHEN c."Cuenta_Id" = 69 THEN t."Tran_MontoDeb" ELSE 0 END) AS "CostoVenta",
-            SUM(CASE WHEN c."Cuenta_Id" = 95 THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosVenta",
-            SUM(CASE WHEN c."Cuenta_Id" = 94 THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosAdmi",
-            SUM(CASE WHEN c."Cuenta_Id" = 67 THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosFinancieros",
-            SUM(CASE WHEN c."Cuenta_Id" = 75 THEN t."Tran_MontoCre" ELSE 0 END) AS "OtrosIngresos",
-            SUM(CASE WHEN c."Cuenta_Id" = 65 THEN t."Tran_MontoDeb" ELSE 0 END) AS "OtrosGastos"
+        SUM(CASE WHEN c."Cuenta_Id" = 70 THEN t."Tran_MontoCre" ELSE 0 END) AS "VentasNetas",
+        SUM(CASE WHEN c."Cuenta_Id" IN (69, 61, 68) THEN t."Tran_MontoDeb" ELSE 0 END) AS "CostoVenta",
+        SUM(CASE WHEN c."Cuenta_Id" IN (95, 62, 63, 64, 94) THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosOperativos",
+        SUM(CASE WHEN c."Cuenta_Id" = 67 THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosFinancieros",
+        SUM(CASE WHEN c."Cuenta_Id" IN (75, 73, 77) THEN t."Tran_MontoCre" ELSE 0 END) AS "OtrosIngresos",
+        SUM(CASE WHEN c."Cuenta_Id" IN (65, 66) THEN t."Tran_MontoDeb" ELSE 0 END) AS "OtrosGastos"
         FROM transacciones t
-        JOIN cuentas c ON t."Tran_CuentaId" = c."Cuenta_Id"
+        JOIN cuentas c ON t."Tran_CuentaId" = c."Cuenta_Id";
     """)
     
     resultado = cur.fetchone()
