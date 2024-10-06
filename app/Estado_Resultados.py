@@ -86,4 +86,5 @@ def abrir_estado_resultados(root, reg_id):
     obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, gastos_operativos, utilidad_operativa, otros_gastos, otros_ingresos, utilidad_antes_impuestos)
 
     # Botón para regresar
-    tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'ver_registro', reg_id)).grid(row=10, column=0, columnspan=2, pady=10)
+    btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
+    btn_guardar.pack(pady=10)
