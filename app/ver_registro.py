@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from tran_mostrar import *
+from funciones_trans import *
 from navegacion import cambiar_pantalla
 from conexion import conectar_db
 from tkcalendar import DateEntry
+from tkinter import messagebox
 
 
 def obtener_transacciones(reg_id):
@@ -86,6 +87,7 @@ def guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, t
         except Exception as e:
             print("Error al guardar los datos:", e)
     else:
+        messagebox.showwarning("Advertencia", "Faltan campos por completar.")
         print("Faltan campos por completar")
 
 
@@ -105,33 +107,42 @@ def agregar_transaccion(root, reg_id, tabla):
 
     # Cuenta
     label_cuenta = tk.Label(frame, text="Cuenta")
-    label_cuenta.grid(row=1, column=1)
+    label_cuenta.grid(row=1, column=1, columnspan=3)
 
+    cmb_cuenta_tipo = ttk.Combobox(frame, width="30", state="readonly")
+    cmb_cuenta_tipo.grid(row=2, column=1)
+    
     cmb_cuenta_id = ttk.Combobox(frame, width="3", state="readonly")
-    cmb_cuenta_id.grid(row=2, column=1)
+    cmb_cuenta_id.grid(row=2, column=2)
 
     cmb_cuenta_nom = ttk.Combobox(frame, width="45", state="readonly")
-    cmb_cuenta_nom.grid(row=2, column=2)
+    cmb_cuenta_nom.grid(row=2, column=3)
 
-    cuentas = obtener_cuentas()
+    # Diccionario para tipos de cuenta
+    tipos_cuenta = {tipo[1]: tipo[0] for tipo in obtener_tipos_cuenta()}
+    cmb_cuenta_tipo['values'] = list(tipos_cuenta.keys())
 
+    cuentas = obtener_cuentas(None)
     cmb_cuenta_id['values'] = [cuenta[0] for cuenta in cuentas]
-    cmb_cuenta_id.bind("<<ComboboxSelected>>", lambda event: sincronizar_nom(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas))
-
     cmb_cuenta_nom['values'] = [cuenta[1] for cuenta in cuentas]
+
+    cmb_cuenta_id.bind("<<ComboboxSelected>>", lambda event: sincronizar_nom(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas))
     cmb_cuenta_nom.bind("<<ComboboxSelected>>", lambda event: sincronizar_id(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas))
+
+    # Manejar de la selección
+    cmb_cuenta_tipo.bind("<<ComboboxSelected>>", lambda event: tipo_cuenta_seleccion(event, cmb_cuenta_tipo, cmb_cuenta_id, cmb_cuenta_nom, tipos_cuenta))
 
     # IsAumento
     cmb_is_aum = ttk.Combobox(frame, width="3", state="readonly", values=["+", "-"])
-    cmb_is_aum.grid(row=2, column=3)
+    cmb_is_aum.grid(row=2, column=4)
 
     # Monto
     label_monto = tk.Label(frame, text="Monto")
-    label_monto.grid(row=1, column=4)
+    label_monto.grid(row=1, column=5)
 
     entry_monto = tk.Entry(frame)
-    entry_monto.grid(row=2, column=4)
+    entry_monto.grid(row=2, column=5)
 
     # Botón para guardar
     btn_guardar = tk.Button(frame, text="Guardar", command=lambda: guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, tabla))
-    btn_guardar.grid(row=3, column=4, pady=10)
+    btn_guardar.grid(row=3, column=5, pady=10)
