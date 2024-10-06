@@ -92,8 +92,8 @@ def abrir_estado_resultados(root, reg_id):
     tk.Label(root, text="Utilidad Antes de Impuestos:").grid(row=8, column=0, sticky='e')
     tk.Entry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row=8, column=1, padx=5, pady=5)
 
-    # Botón para cargar datos
-    tk.Button(root, text="Cargar Estado de Resultados", command=lambda: obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, gastos_operativos, utilidad_operativa, otros_gastos, otros_ingresos, utilidad_antes_impuestos)).grid(row=9, column=0, columnspan=2, pady=10)
+    # Cargar los datos del estado de resultados automáticamente al abrir la pantalla
+    obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, gastos_operativos, utilidad_operativa, otros_gastos, otros_ingresos, utilidad_antes_impuestos)
 
     # Botón para regresar
     tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'ver_registro', reg_id)).grid(row=10, column=0, columnspan=2, pady=10)
