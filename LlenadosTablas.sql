@@ -110,6 +110,6 @@ VALUES
 	(2, 'dólares', '$');
 	
 INSERT INTO registros(
-	"Reg_MonedaId", "Reg_SaldoIncial", "Reg_Fecha")
+	"Reg_Nombre", "Reg_MonedaId", "Reg_Fecha")
 VALUES 
-	(1, 2000, '27/09/24');
+	('Registro Anual para el año 2024', 1, '27/09/24');

@@ -6,7 +6,7 @@ from navegacion import cambiar_pantalla
 def obtener_registros():
     conn = conectar_db()
     cursor = conn.cursor()
-    cursor.execute('SELECT "Reg_Id", "Reg_Fecha" FROM registros ORDER BY "Reg_Fecha" DESC')
+    cursor.execute('SELECT "Reg_Id", "Reg_Nombre" FROM registros ORDER BY "Reg_Fecha" DESC')
     registros = cursor.fetchall()
     conn.close()
     return registros
@@ -22,8 +22,8 @@ def mostrar_bienvenida(root):
 
     # Listar registros como botones
     registros = obtener_registros()
-    for reg_id, fecha in registros:
-        boton_registro = ttk.Button(root, text=f"Registro del {fecha}",
+    for reg_id, nombre in registros:
+        boton_registro = ttk.Button(root, text=nombre,
                                     command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
         boton_registro.pack(pady=5)
 

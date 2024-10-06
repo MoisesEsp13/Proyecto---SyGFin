@@ -3,11 +3,11 @@ from tkinter import ttk
 from conexion import conectar_db
 from navegacion import cambiar_pantalla
 
-def guardar_registro(moneda, saldo_inicial):
+def guardar_registro(moneda, nombre):
     conn = conectar_db()
     cursor = conn.cursor()
-    query = '''INSERT INTO registros("Reg_MonedaId", "Reg_SaldoIncial", "Reg_Fecha") VALUES (%s, %s, CURRENT_DATE)'''
-    cursor.execute(query, (moneda, saldo_inicial))
+    query = '''INSERT INTO registros("Reg_MonedaId", "Reg_Nombre", "Reg_Fecha") VALUES (%s, %s, CURRENT_DATE)'''
+    cursor.execute(query, (moneda, nombre))
     conn.commit()
     conn.close()
 
@@ -28,13 +28,13 @@ def mostrar_crear_registro(root):
     cmb_moneda.pack()
 
     # Saldo inicial
-    label_saldo = tk.Label(root, text="Saldo Inicial")
-    label_saldo.pack()
-    entry_saldo = tk.Entry(root)
-    entry_saldo.pack()
+    label_nombre = tk.Label(root, text="Nombre")
+    label_nombre.pack()
+    entry_nombre = tk.Entry(root, width=50)
+    entry_nombre.pack()
 
     # Botón para guardar
-    btn_guardar = tk.Button(root, text="Guardar", command=lambda: guardar_registro(monedas[cmb_moneda.get()], entry_saldo.get()))
+    btn_guardar = tk.Button(root, text="Guardar", command=lambda: guardar_registro(monedas[cmb_moneda.get()], entry_nombre.get()))
     btn_guardar.pack(pady=10)
 
     # Botón para regresar

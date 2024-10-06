@@ -43,8 +43,8 @@ CREATE TABLE monedas
 CREATE TABLE registros
 (
 	"Reg_Id" SERIAL PRIMARY KEY,
+	"Reg_Nombre" VARCHAR(256),
 	"Reg_MonedaId" SMALLINT,
-	"Reg_SaldoIncial" NUMERIC(15, 2),
 	"Reg_Fecha" DATE,
 	FOREIGN KEY ("Reg_MonedaId") REFERENCES monedas("Moneda_Id")
 );
