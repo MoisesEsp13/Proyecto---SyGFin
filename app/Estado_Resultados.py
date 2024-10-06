@@ -2,16 +2,7 @@ import psycopg2
 import tkinter as tk
 from tkinter import ttk
 from navegacion import cambiar_pantalla
-
-# Función para conectar a la base de datos
-def conectar_db():
-    try:
-        conn = psycopg2.connect(dbname="SistemaContable", user="postgres",
-                                password="123456", host="localhost", port="5432")
-        return conn
-    except Exception as e:
-        print(f"Error al conectar a la base de datos: {e}")
-        return None
+from conexion import conectar_db
 
 # Función para obtener los datos del estado de resultados
 def obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, gastos_operativos, utilidad_operativa,
