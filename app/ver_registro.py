@@ -60,7 +60,7 @@ def mostrar_ver_registro(root, reg_id):
                                 fg_color="#4A5568", hover_color="#2D3748", text_color="white")
     btn_mayores.pack(side=ctk.LEFT, padx=10)
 
-    btn_balanza = tk.Button(root, text="Balanza de Comprobación", 
+    btn_balanza = ctk.CTkButton(root, text="Balanza de Comprobación", 
                             command=lambda: cambiar_pantalla(root, 'balanza_comprobacion', reg_id),
                                 fg_color="#4A5568", hover_color="#2D3748", text_color="white")
     btn_balanza.pack(side=tk.LEFT, padx=10)
