@@ -157,30 +157,6 @@ def mostrar_situacion_financiera(root, reg_id):
         cur.close()
         conn.close()
 
-        # Total Pasivos
-        total_pasivos = sum(monto[2] for monto in pasivos)
-
-        # Frame para Pasivos (Columna derecha arriba)
-        frame_pasivos = ttk.Frame(container_frame, relief="raised", borderwidth=1, height=50)
-        frame_pasivos.grid(row=1, column=1, padx=10, pady=5, sticky="nsew")
-        ttk.Label(frame_pasivos, text="Pasivos", font=("Arial", 12, "bold")).pack()
-
-        tabla_pasivos = ttk.Treeview(frame_pasivos, columns=("Nota", "Nombre", "Monto"), show="headings")
-        tabla_pasivos.heading("Nota", text="Nota")
-        tabla_pasivos.heading("Nombre", text="Nombre")
-        tabla_pasivos.heading("Monto", text="Monto")
-
-        # Ajustar los anchos de las columnas
-        tabla_pasivos.column("Nota", width=35, stretch=False)
-        tabla_pasivos.column("Nombre", width=230)
-        tabla_pasivos.column("Monto", width=100, stretch=False) 
-
-        for hombre in pasivos:
-            tabla_pasivos.insert("", "end", values=hombre)
-
-        tabla_pasivos.pack(fill="x")
-        ttk.Label(frame_pasivos, text=f"Pasivo total: {total_pasivos:.2f}", font=("Arial", 10, "bold")).pack(anchor="e")
-
         # Consulta de patrimonio
         conn = conectar_db()
         cur = conn.cursor()
@@ -200,9 +176,31 @@ def mostrar_situacion_financiera(root, reg_id):
         cur.close()
         conn.close()
 
-        # Total patrimonio
+        # Total pasivos y patrimonio
+        total_pasivos = sum(monto[2] for monto in pasivos)
         total_patrimonio = sum(monto[2] for monto in patrimonio)
         total_pasivos_y_patrimonio = total_pasivos + total_patrimonio
+
+        # Frame para Pasivos (Columna derecha arriba)
+        frame_pasivos = ttk.Frame(container_frame, relief="raised", borderwidth=1, height=50)
+        frame_pasivos.grid(row=1, column=1, padx=10, pady=5, sticky="nsew")
+        ttk.Label(frame_pasivos, text="Pasivos", font=("Arial", 12, "bold")).pack()
+
+        tabla_pasivos = ttk.Treeview(frame_pasivos, columns=("Nota", "Nombre", "Monto"), show="headings")
+        tabla_pasivos.heading("Nota", text="Nota")
+        tabla_pasivos.heading("Nombre", text="Nombre")
+        tabla_pasivos.heading("Monto", text="Monto")
+
+        # Ajustar los anchos de las columnas
+        tabla_pasivos.column("Nota", width=35, stretch=False)
+        tabla_pasivos.column("Nombre", width=230)
+        tabla_pasivos.column("Monto", width=100, stretch=False) 
+
+        for pas in pasivos:
+            tabla_pasivos.insert("", "end", values=pas)
+
+        tabla_pasivos.pack(fill="x")
+        ttk.Label(frame_pasivos, text=f"Pasivo total: {total_pasivos:.2f}", font=("Arial", 10, "bold")).pack(anchor="e")
 
         # Frame para patrimonio (Columna derecha abajo)
         frame_patrimonio = ttk.Frame(container_frame, relief="raised", borderwidth=1, height=50)
@@ -219,8 +217,8 @@ def mostrar_situacion_financiera(root, reg_id):
         tabla_patrimonio.column("Nombre", width=230)
         tabla_patrimonio.column("Monto", width=100, stretch=False) 
 
-        for hombre in patrimonio:
-            tabla_patrimonio.insert("", "end", values=hombre)
+        for patr in patrimonio:
+            tabla_patrimonio.insert("", "end", values=patr)
 
         tabla_patrimonio.pack(fill="x")
         ttk.Label(frame_patrimonio, text=f"Patrimonio total: {total_patrimonio:.2f}", font=("Arial", 10, "bold")).pack(anchor="e")
