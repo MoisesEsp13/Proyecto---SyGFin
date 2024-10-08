@@ -32,8 +32,11 @@ def mostrar_ver_registro(root, reg_id):
                      fieldbackground="#2E2E2E", rowheight=25)
     estilo.configure("Treeview.Heading", background="#1C1C1C", foreground="white")
 
+    estilo = ttk.Style()
+    estilo.configure("White.Treeview", background="white", fieldbackground="white", foreground="dark blue")
+
     # Crear tabla
-    tabla = ttk.Treeview(root, columns=("Fecha", "Cuenta", "Debe", "Haber"), show="headings")
+    tabla = ttk.Treeview(root, columns=("Fecha", "Cuenta", "Debe", "Haber"), show="headings", style="White.Treeview")
     tabla.heading("Fecha", text="Fecha")
     tabla.heading("Cuenta", text="Cuenta")
     tabla.heading("Debe", text="Debe")
