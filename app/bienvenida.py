@@ -22,7 +22,7 @@ def mostrar_bienvenida(root):
     titulo.pack(pady=(20, 10))
 
     # Cargar imagen
-    imagen_path = "imagenes/logo6.png"
+    imagen_path = "app/imagenes/logo6.png"
     imagen_logo = ctk.CTkImage(Image.open(imagen_path), size=(200, 200))
     logo_label = ctk.CTkLabel(root, image=imagen_logo, text="")
     logo_label.pack(pady=10)

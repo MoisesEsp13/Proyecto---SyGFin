@@ -52,6 +52,18 @@ def abrir_estado_resultados(root, reg_id):
     # Limpiar la ventana
     for widget in root.winfo_children():
         widget.destroy()
+    
+    conn = conectar_db()
+    cur = conn.cursor()
+    cur.execute(""" 
+        SELECT "Reg_Nombre"
+        FROM registros
+        WHERE "Reg_Id" = %s        
+    """, (reg_id,))  
+    nombre_entidad = cur.fetchone() 
+    cur.close()
+    conn.close()
+    nombre_entidad_valor = nombre_entidad[0]
 
     # Variables para los campos del estado de resultados
     ventas_netas = tk.StringVar()
@@ -65,8 +77,8 @@ def abrir_estado_resultados(root, reg_id):
 
     # Crear y organizar la interfaz gráfica
     # Encabezado centrado
-    tk.Label(root, text="Estado de Resultados - Periodo", font=("Arial", 16, "bold")).grid(row=0, column=0, columnspan=2, pady=10, sticky='ew')
-
+    tk.Label(root, text=f"Estado de Resultados - {nombre_entidad_valor}", font=("Arial", 16, "bold")).grid(row=0, column=0, columnspan=2, pady=10, sticky='ew')
+   
     # Ventas Netas (Resaltado)
     tk.Label(root, text="Ventas Netas:", font=("Arial", 12, "bold"), fg="blue").grid(row=1, column=0, sticky='e', padx=10)
     tk.Entry(root, textvariable=ventas_netas, state="readonly").grid(row=1, column=1, padx=5, pady=5, sticky='w')
