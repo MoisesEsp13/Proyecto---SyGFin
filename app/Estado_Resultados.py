@@ -64,35 +64,48 @@ def abrir_estado_resultados(root, reg_id):
     utilidad_antes_impuestos = tk.StringVar()
 
     # Crear y organizar la interfaz gráfica
-    tk.Label(root, text="Estado de Resultados - Periodo", font=("Arial", 16, "bold")).grid(row=0, column=0, columnspan=2)
+    # Encabezado centrado
+    tk.Label(root, text="Estado de Resultados - Periodo", font=("Arial", 16, "bold")).grid(row=0, column=0, columnspan=2, pady=10, sticky='ew')
 
-    tk.Label(root, text="Ventas Netas:").grid(row=1, column=0, sticky='e')
-    tk.Entry(root, textvariable=ventas_netas, state="readonly").grid(row=1, column=1, padx=5, pady=5)
+    # Ventas Netas (Resaltado)
+    tk.Label(root, text="Ventas Netas:", font=("Arial", 12, "bold"), fg="blue").grid(row=1, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=ventas_netas, state="readonly").grid(row=1, column=1, padx=5, pady=5, sticky='w')
 
-    tk.Label(root, text="Costo de la Venta:").grid(row=2, column=0, sticky='e')
-    tk.Entry(root, textvariable=costo_ventas, state="readonly").grid(row=2, column=1, padx=5, pady=5)
+    # Costo de la Venta
+    tk.Label(root, text="Costo de la Venta:").grid(row=2, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=costo_ventas, state="readonly").grid(row=2, column=1, padx=5, pady=5, sticky='w')
 
-    tk.Label(root, text="Utilidad Bruta:").grid(row=3, column=0, sticky='e')
-    tk.Entry(root, textvariable=utilidad_bruta, state="readonly").grid(row=3, column=1, padx=5, pady=5)
+    # Utilidad Bruta (Resaltado)
+    tk.Label(root, text="Utilidad Bruta:", font=("Arial", 12, "bold"), fg="blue").grid(row=3, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=utilidad_bruta, state="readonly").grid(row=3, column=1, padx=5, pady=5, sticky='w')
 
-    tk.Label(root, text="Gastos Operativos:").grid(row=4, column=0, sticky='e')
-    tk.Entry(root, textvariable=gastos_operativos, state="readonly").grid(row=4, column=1, padx=5, pady=5)
+    # Gastos Operativos
+    tk.Label(root, text="Gastos Operativos:").grid(row=4, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=gastos_operativos, state="readonly").grid(row=4, column=1, padx=5, pady=5, sticky='w')
 
-    tk.Label(root, text="Utilidad Operativa:").grid(row=5, column=0, sticky='e')
-    tk.Entry(root, textvariable=utilidad_operativa, state="readonly").grid(row=5, column=1, padx=5, pady=5)
+    # Utilidad Operativa (Resaltado)
+    tk.Label(root, text="Utilidad Operativa:", font=("Arial", 12, "bold"), fg="blue").grid(row=5, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=utilidad_operativa, state="readonly").grid(row=5, column=1, padx=5, pady=5, sticky='w')
 
-    tk.Label(root, text="Otros Gastos:").grid(row=6, column=0, sticky='e')
-    tk.Entry(root, textvariable=otros_gastos, state="readonly").grid(row=6, column=1, padx=5, pady=5)
+    # Otros Gastos
+    tk.Label(root, text="Otros Gastos:").grid(row=6, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=otros_gastos, state="readonly").grid(row=6, column=1, padx=5, pady=5, sticky='w')
 
-    tk.Label(root, text="Otros Ingresos:").grid(row=7, column=0, sticky='e')
-    tk.Entry(root, textvariable=otros_ingresos, state="readonly").grid(row=7, column=1, padx=5, pady=5)
+    # Otros Ingresos
+    tk.Label(root, text="Otros Ingresos:").grid(row=7, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=otros_ingresos, state="readonly").grid(row=7, column=1, padx=5, pady=5, sticky='w')
 
-    tk.Label(root, text="Utilidad Antes de Impuestos:").grid(row=8, column=0, sticky='e')
-    tk.Entry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row=8, column=1, padx=5, pady=5)
+    # Utilidad Antes de Impuestos (Resaltado)
+    tk.Label(root, text="Utilidad Antes de Impuestos:", font=("Arial", 12, "bold"), fg="blue").grid(row=8, column=0, sticky='e', padx=10)
+    tk.Entry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row=8, column=1, padx=5, pady=5, sticky='w')
 
     # Botón para regresar
     btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
     btn_guardar.grid(row=9, column=0, columnspan=2, pady=10)
+
+    # Configurar el centrado y alineación
+    root.grid_columnconfigure(0, weight=1)
+    root.grid_columnconfigure(1, weight=1)
 
     # Cargar los datos del estado de resultados automáticamente al abrir la pantalla
     obtener_datos_estado_resultados(ventas_netas, costo_ventas, utilidad_bruta, gastos_operativos, utilidad_operativa, otros_gastos, otros_ingresos, utilidad_antes_impuestos)
