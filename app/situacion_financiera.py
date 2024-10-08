@@ -1,3 +1,4 @@
+import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
 from conexion import conectar_db
@@ -10,7 +11,7 @@ def mostrar_situacion_financiera(root, reg_id):
         widget.destroy()
 
     # Crear un canvas con scrollbar
-    canvas = tk.Canvas(root)
+    canvas = ctk.CTkCanvas(root, bg="#242424")
     scrollbar = ttk.Scrollbar(root, orient="vertical", command=canvas.yview)
     scrollable_frame = ttk.Frame(canvas)
 
@@ -237,8 +238,10 @@ def mostrar_situacion_financiera(root, reg_id):
     scrollbar.pack(side="right", fill="y")
 
     # Botón para regresar
-    btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
-    btn_guardar.pack(pady=5)
+    btn_guardar = ctk.CTkButton(root, text="Regresar", 
+                                command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r), 
+                                font=("Helvetica", 16), fg_color="#4A5568", hover_color="#2D3748")
+    btn_guardar.pack(pady=10)
 
     # Actualizar datos por primera vez
     update_financial_data()
