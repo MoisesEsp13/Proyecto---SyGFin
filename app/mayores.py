@@ -1,3 +1,4 @@
+import customtkinter as ctk
 import tkinter as tk
 import random
 from tkinter import ttk
@@ -59,23 +60,27 @@ def mostrar_mayores(root, reg_id):
         cuentas[cuenta].append(mayor[2:])
 
     # Crear un canvas
-    canvas = tk.Canvas(root)
+    canvas = ctk.CTkCanvas(root, bg="#242424")
     canvas.grid(row=1, column=0, sticky="nsew")
 
     # Crear una barra de desplazamiento para el canvas
-    scrollbar = ttk.Scrollbar(root, orient="vertical", command=canvas.yview)
+    scrollbar = ctk.CTkScrollbar(root, orientation="vertical", command=canvas.yview)
     scrollbar.grid(row=1, column=1, sticky="ns")
 
     # Configurar el canvas para funcionar con la barra de desplazamiento
     canvas.configure(yscrollcommand=scrollbar.set)
 
     # Crear un Frame dentro del canvas
-    scrollable_frame = ttk.Frame(canvas)
+    scrollable_frame = ctk.CTkFrame(canvas)
     canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
 
     # Formateando el root
     root.grid_rowconfigure(1, weight=1)
     root.grid_columnconfigure(0, weight=1)
+
+    # Definir estilo para tablas con fondo blanco
+    estilo = ttk.Style()
+    estilo.configure("White.Treeview", background="white", fieldbackground="white", foreground="black")
 
     # Contador de cuentas
     contador = 0
@@ -83,7 +88,7 @@ def mostrar_mayores(root, reg_id):
     # Mostrar el mayor de cada cuenta
     for cuenta, movimientos in cuentas.items():
         # Crear un Frame para cada cuenta
-        frame_cuenta = tk.Frame(scrollable_frame, relief="raised", borderwidth=1)
+        frame_cuenta = ctk.CTkFrame(scrollable_frame, border_width=1, fg_color="lightgray", corner_radius=10)
         frame_cuenta.grid(row=contador, column=0, pady=10, padx=10, sticky="nsew")
 
         # Buscar nombre de la cuenta
@@ -103,8 +108,8 @@ def mostrar_mayores(root, reg_id):
         # Crear la tabla de movimientos
         columns1 = ("Fecha", "Debe")
         columns2 = ("Haber", "Fecha")
-        tabla1 = ttk.Treeview(frame_cuenta, columns=columns1, show="headings")
-        tabla2 = ttk.Treeview(frame_cuenta, columns=columns2, show="headings")
+        tabla1 = ttk.Treeview(frame_cuenta, columns=columns1, show="headings", style="White.Treeview", height=5)
+        tabla2 = ttk.Treeview(frame_cuenta, columns=columns2, show="headings", style="White.Treeview", height=5)
 
         # Definir Encabezados
         tabla1.heading("Fecha", text="Fecha")
@@ -136,11 +141,15 @@ def mostrar_mayores(root, reg_id):
         # Ubicar saldos
         if saldo < 0:
             saldo = saldo * (-1)
-            saldo_neto = tk.Label(frame_cuenta, text=f"Saldo Final: {saldo:.2f}", font=("Arial", 10, "bold"))
-            saldo_neto.grid(row=2, column=2)
+            saldo_neto = ctk.CTkLabel(frame_cuenta, text=f"Saldo Final: {saldo:.2f}", 
+                                      font=("Arial", 13, "bold"),
+                                      text_color="black")
+            saldo_neto.grid(row=2, column=2, padx=3, pady=3)
         else:
-            saldo_neto = tk.Label(frame_cuenta, text=f"Saldo Final: {saldo:.2f}", font=("Arial", 10, "bold"))
-            saldo_neto.grid(row=2, column=0)
+            saldo_neto = ctk.CTkLabel(frame_cuenta, text=f"Saldo Final: {saldo:.2f}", 
+                                      font=("Arial", 13, "bold"),
+                                      text_color="black")
+            saldo_neto.grid(row=2, column=0, padx=3, pady=3)
         
         contador += 1
 
@@ -149,8 +158,11 @@ def mostrar_mayores(root, reg_id):
     canvas.config(scrollregion=canvas.bbox("all"))
 
     # Título Ventana
-    ventana = tk.Label(root, text="Mayores del registro", font=("Helvetica", 16, "bold"))
-    ventana.grid(row=0, column=0, columnspan=2)
+    ventana = ctk.CTkLabel(root, text="Mayores del registro", font=("Helvetica", 20, "bold"), text_color="#2B6CB0")
+    ventana.grid(row=0, column=0, columnspan=2, pady=10)
+
     # Botón para regresar
-    btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
-    btn_guardar.grid(row=0, column=2, sticky="e")
+    btn_guardar = ctk.CTkButton(root, text="Regresar", 
+                                command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r), 
+                                font=("Helvetica", 16), fg_color="#4A5568", hover_color="#2D3748")
+    btn_guardar.grid(row=0, column=2, padx=10, pady=10, sticky="e")

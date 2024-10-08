@@ -47,8 +47,6 @@ def mostrar_bienvenida(root):
         command=lambda: cambiar_pantalla(root, 'crear_registro'),
         font=("Helvetica", 16, "bold"),
         text_color="white",
-        corner_radius=8,
-        height=25,
-        width=150
+        corner_radius=8
     )
     btn_crear.pack(pady=(15, 10))
