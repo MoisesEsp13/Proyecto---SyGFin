@@ -1,11 +1,14 @@
+import customtkinter as ctk
 import tkinter as tk
-import datetime, locale
+import datetime
+import locale
 from tkinter import ttk
 from navegacion import cambiar_pantalla
 from mayores import obtener_mayores
 
 def generar_balanza(root, reg_id):
     mayores = obtener_mayores(reg_id)
+
     # Limpiar la ventana
     for widget in root.winfo_children():
         widget.destroy()
@@ -21,63 +24,55 @@ def generar_balanza(root, reg_id):
     # Calcular saldo de cuentas
     cuentas_neto = []
     for cuenta, movimientos in cuentas.items():
-        datos = []
-        datos.append(cuenta)
+        datos = [cuenta]
         for i in mayores:
             if i[0] == cuenta:
-                datos.append(i[1])
+                datos.append(i[1])  # Nombre de la cuenta
                 break
-        saldo = 0
-        for i in movimientos:
-            saldo += i[1] - i[2]
+        saldo = sum(movimiento[1] - movimiento[2] for movimiento in movimientos)
         datos.append(saldo)
         cuentas_neto.append(datos)
 
-
-    # Labels de Título
-    titulo = tk.Label(root, text="Balanza de Comprobación", font=("Helvetica", 16, "bold"))
-    titulo.grid(row=0, column=1)
+    # Etiquetas de título
+    titulo = ctk.CTkLabel(root, text="Balanza de Comprobación", font=("Helvetica", 20, "bold"), text_color="#2B6CB0")
+    titulo.grid(row=0, column=1, pady=(10, 0))
 
     locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
-
-    aviso = tk.Label(root, text="Balanza a la fecha:", font=("Helvetica", 12, "bold"))
+    aviso = ctk.CTkLabel(root, text="Balanza a la fecha:", font=("Helvetica", 12, "bold"))
     aviso.grid(row=1, column=1)
 
-    fecha = tk.Label(root, text=datetime.date.today().strftime("%d de %B de %Y"), font=("Helvetica", 12, "bold"))
+    fecha = ctk.CTkLabel(root, text=datetime.date.today().strftime("%d de %B de %Y"), font=("Helvetica", 12, "bold"))
     fecha.grid(row=2, column=1)
 
     # Tabla de Balanza
     columnas = ("N", "Titulo", "Debe", "Haber")
-    tabla = ttk.Treeview(root, columns=columnas, show="headings")
-    tabla.grid(row=3, column=1, sticky="nsew")
+    tabla = ttk.Treeview(root, columns=columnas, show="headings", height=10)
+    tabla.grid(row=3, column=1, sticky="nsew", padx=20, pady=10)
 
-    # Configurar Contenido de cabeceras
-    tabla.heading("N", text="")
+    # Configurar contenido de cabeceras
+    tabla.heading("N", text="Cuenta")
     tabla.heading("Titulo", text="Título")
     tabla.heading("Debe", text="Debe")
     tabla.heading("Haber", text="Haber")
 
-    # Configurar formato de cabeceras
-    tabla.column("N", anchor="center", width=5, )
-    tabla.column("Debe", anchor="center", width=10)
-    tabla.column("Haber", anchor="center", width=10)
+    # Configurar formato de columnas
+    tabla.column("N", anchor="center", width=50)
+    tabla.column("Titulo", anchor="w", width=200)
+    tabla.column("Debe", anchor="center", width=100)
+    tabla.column("Haber", anchor="center", width=100)
 
-    # Insertar datos de la tabla
+    # Insertar datos en la tabla
     for fila in cuentas_neto:
         if fila[2] < 0:
-            tabla.insert("", "end", values=(fila[0], fila[1], "", fila[2]*(-1)))
+            tabla.insert("", "end", values=(fila[0], fila[1], "", f"{abs(fila[2]):.2f}"))
         else:
-            tabla.insert("", "end", values=(fila[0], fila[1], fila[2], ""))
+            tabla.insert("", "end", values=(fila[0], fila[1], f"{fila[2]:.2f}", ""))
 
-    # Formato
-    col1 = tk.Label(root, width=5, height=5)
-    col1.grid(row=4, column=0)
-    col2 = tk.Label(root, width=5, height=5)
-    col2.grid(row=4, column=2)
-
-    # Formateando el Root
+    # Configuración de diseño
     root.grid_columnconfigure(1, weight=1)
 
-    # Botón para regresar
-    btn_regresar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
-    btn_regresar.grid(row=4, column=1, sticky="e")
+    # Botón de regreso
+    btn_regresar = ctk.CTkButton(root, text="Regresar", 
+                                command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r), 
+                                font=("Helvetica", 16), fg_color="#4A5568", hover_color="#2D3748")
+    btn_regresar.grid(row=4, column=1, padx=10, pady=10, sticky="e")

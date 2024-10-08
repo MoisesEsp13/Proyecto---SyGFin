@@ -1,4 +1,4 @@
-import psycopg2
+import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
 from navegacion import cambiar_pantalla
@@ -65,43 +65,45 @@ def abrir_estado_resultados(root, reg_id):
 
     # Crear y organizar la interfaz gráfica
     # Encabezado centrado
-    tk.Label(root, text="Estado de Resultados - Periodo", font=("Arial", 16, "bold")).grid(row=0, column=0, columnspan=2, pady=10, sticky='ew')
-
+    titulo = ctk.CTkLabel(root, text="Estado de Resultados - Periodo", font=("Helvetica", 24, "bold"), text_color="#2B6CB0")
+    titulo.grid(row=0, column=0, columnspan=2, pady=20)
+    
     # Ventas Netas (Resaltado)
-    tk.Label(root, text="Ventas Netas:", font=("Arial", 12, "bold"), fg="blue").grid(row=1, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=ventas_netas, state="readonly").grid(row=1, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Ventas Netas:", font=("Arial", 12, "bold"), text_color="#2B6CB0").grid(row=1, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=ventas_netas, state="readonly").grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
     # Costo de la Venta
-    tk.Label(root, text="Costo de la Venta:").grid(row=2, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=costo_ventas, state="readonly").grid(row=2, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Costo de la Venta:", font=("Arial", 12), text_color="#2B6CB0").grid(row=2, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=costo_ventas, state="readonly").grid(row=2, column=1, padx=5, pady=5, sticky="w")
 
     # Utilidad Bruta (Resaltado)
-    tk.Label(root, text="Utilidad Bruta:", font=("Arial", 12, "bold"), fg="blue").grid(row=3, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=utilidad_bruta, state="readonly").grid(row=3, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Utilidad Bruta:", font=("Arial", 12, "bold"), text_color="#2B6CB0").grid(row=3, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=utilidad_bruta, state="readonly").grid(row=3, column=1, padx=5, pady=5, sticky="w")
 
     # Gastos Operativos
-    tk.Label(root, text="Gastos Operativos:").grid(row=4, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=gastos_operativos, state="readonly").grid(row=4, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Gastos Operativos:", font=("Arial", 12), text_color="#2B6CB0").grid(row=4, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=gastos_operativos, state="readonly").grid(row=4, column=1, padx=5, pady=5, sticky="w")
 
     # Utilidad Operativa (Resaltado)
-    tk.Label(root, text="Utilidad Operativa:", font=("Arial", 12, "bold"), fg="blue").grid(row=5, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=utilidad_operativa, state="readonly").grid(row=5, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Utilidad Operativa:", font=("Arial", 12, "bold"), text_color="#2B6CB0").grid(row=5, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=utilidad_operativa, state="readonly").grid(row=5, column=1, padx=5, pady=5, sticky="w")
 
     # Otros Gastos
-    tk.Label(root, text="Otros Gastos:").grid(row=6, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=otros_gastos, state="readonly").grid(row=6, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Otros Gastos:", font=("Arial", 12), text_color="#2B6CB0").grid(row=6, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=otros_gastos, state="readonly").grid(row=6, column=1, padx=5, pady=5, sticky="w")
 
     # Otros Ingresos
-    tk.Label(root, text="Otros Ingresos:").grid(row=7, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=otros_ingresos, state="readonly").grid(row=7, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Otros Ingresos:", font=("Arial", 12), text_color="#2B6CB0").grid(row=7, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=otros_ingresos, state="readonly").grid(row=7, column=1, padx=5, pady=5, sticky="w")
 
     # Utilidad Antes de Impuestos (Resaltado)
-    tk.Label(root, text="Utilidad Antes de Impuestos:", font=("Arial", 12, "bold"), fg="blue").grid(row=8, column=0, sticky='e', padx=10)
-    tk.Entry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row=8, column=1, padx=5, pady=5, sticky='w')
+    ctk.CTkLabel(root, text="Utilidad Antes de Impuestos:", font=("Arial", 12, "bold"), text_color="#2B6CB0").grid(row=8, column=0, sticky="e", padx=10)
+    ctk.CTkEntry(root, textvariable=utilidad_antes_impuestos, state="readonly").grid(row=8, column=1, padx=5, pady=5, sticky="w")
 
     # Botón para regresar
-    btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
-    btn_guardar.grid(row=9, column=0, columnspan=2, pady=10)
+    btn_regresar = ctk.CTkButton(root, text="Regresar", fg_color="#4A5568", hover_color="#2D3748", text_color="white",
+                                 command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
+    btn_regresar.grid(row=9, column=0, columnspan=2, pady=20)
 
     # Configurar el centrado y alineación
     root.grid_columnconfigure(0, weight=1)
