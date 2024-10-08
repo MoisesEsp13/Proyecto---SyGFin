@@ -41,7 +41,7 @@ def mostrar_ver_registro(root, reg_id):
 
     # Ajustar ancho
     tabla.column("Fecha", width=90, anchor="center")
-    tabla.column("Cuenta", width=350)
+    tabla.column("Cuenta", width=400)
     tabla.column("Debe", width=120, anchor="center") 
     tabla.column("Haber", width=120, anchor="center")
 

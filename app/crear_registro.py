@@ -41,8 +41,7 @@ def mostrar_crear_registro(root):
     # Botón para guardar
     btn_guardar = ctk.CTkButton(root, text="Guardar",
                                 command=lambda: guardar_registro(monedas[cmb_moneda.get()], entry_nombre.get(), cmb_moneda, entry_nombre),
-                                font=("Helvetica", 16),
-                                fg_color="#4A5568", hover_color="#2C5282")
+                                font=("Helvetica", 16))
     btn_guardar.pack(pady=15)
 
     # Botón para regresar
