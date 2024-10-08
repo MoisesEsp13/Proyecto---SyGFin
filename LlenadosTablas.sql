@@ -108,8 +108,3 @@ INSERT INTO monedas(
 VALUES 
 	(1, 'soles', 'S/.'),
 	(2, 'dólares', '$');
-	
-INSERT INTO registros(
-	"Reg_Nombre", "Reg_MonedaId", "Reg_Fecha")
-VALUES 
-	('Registro Anual para el año 2024', 1, '27/09/24');

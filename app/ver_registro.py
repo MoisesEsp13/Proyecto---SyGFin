@@ -32,8 +32,11 @@ def mostrar_ver_registro(root, reg_id):
                      fieldbackground="#2E2E2E", rowheight=25)
     estilo.configure("Treeview.Heading", background="#1C1C1C", foreground="white")
 
+    estilo = ttk.Style()
+    estilo.configure("White.Treeview", background="white", fieldbackground="white", foreground="dark blue")
+
     # Crear tabla
-    tabla = ttk.Treeview(root, columns=("Fecha", "Cuenta", "Debe", "Haber"), show="headings")
+    tabla = ttk.Treeview(root, columns=("Fecha", "Cuenta", "Debe", "Haber"), show="headings", style="White.Treeview")
     tabla.heading("Fecha", text="Fecha")
     tabla.heading("Cuenta", text="Cuenta")
     tabla.heading("Debe", text="Debe")
@@ -111,32 +114,50 @@ def guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, t
         print("Faltan campos por completar")
 
 
+
 def agregar_transaccion(root, reg_id, tabla):
-    
-    frame = tk.Frame(root)
+
+    frame = tk.Frame(
+        root,
+        padx=7, pady=3,
+        bg="#f0f8ff",
+        highlightbackground="#1e3d73",
+        highlightthickness=3
+    )
     frame.pack(pady=10)
 
-    # Fecha
-    label_fecha = tk.Label(frame, text="Fecha")
-    label_fecha.grid(row=1, column=0)
+    label_style = {"font": ("Arial", 10, "bold"), "bg": "#f0f8ff", "fg": "#1e3d73"}
 
-    entry_fecha = DateEntry(frame, width=12, background="dark gray",
-                            foreground="white", date_pattern="yyyy-mm-dd",
-                            borderwidth=2)
-    entry_fecha.grid(row=2, column=0)
+    # Fecha
+    label_fecha = tk.Label(frame, text="Fecha", **label_style)
+    label_fecha.grid(row=1, column=0, padx=5, pady=5)
+
+    entry_fecha = DateEntry(
+        frame,
+        width=12,
+        background="#1e3d73",
+        foreground="white",
+        date_pattern="yyyy-mm-dd",
+        borderwidth=2,
+    )
+    entry_fecha.grid(row=2, column=0, padx=5, pady=5)
 
     # Cuenta
-    label_cuenta = tk.Label(frame, text="Cuenta")
-    label_cuenta.grid(row=1, column=1, columnspan=3)
+    label_cuenta = tk.Label(frame, text="Cuenta", **label_style)
+    label_cuenta.grid(row=1, column=1, columnspan=3, padx=5, pady=5)
 
-    cmb_cuenta_tipo = ttk.Combobox(frame, width="30", state="readonly")
-    cmb_cuenta_tipo.grid(row=2, column=1)
-    
-    cmb_cuenta_id = ttk.Combobox(frame, width="3", state="readonly")
-    cmb_cuenta_id.grid(row=2, column=2)
+    # Comboboxes
+    combo_style = ttk.Style()
+    combo_style.configure("TCombobox", fieldbackground="#e1ecf7", background="white", foreground="#1e3d73")
 
-    cmb_cuenta_nom = ttk.Combobox(frame, width="45", state="readonly")
-    cmb_cuenta_nom.grid(row=2, column=3)
+    cmb_cuenta_tipo = ttk.Combobox(frame, width=30, state="readonly", style="TCombobox")
+    cmb_cuenta_tipo.grid(row=2, column=1, padx=5, pady=5)
+
+    cmb_cuenta_id = ttk.Combobox(frame, width=3, state="readonly", style="TCombobox")
+    cmb_cuenta_id.grid(row=2, column=2, padx=5, pady=5)
+
+    cmb_cuenta_nom = ttk.Combobox(frame, width=45, state="readonly", style="TCombobox")
+    cmb_cuenta_nom.grid(row=2, column=3, padx=5, pady=5)
 
     # Diccionario para tipos de cuenta
     tipos_cuenta = {tipo[1]: tipo[0] for tipo in obtener_tipos_cuenta()}
@@ -149,20 +170,29 @@ def agregar_transaccion(root, reg_id, tabla):
     cmb_cuenta_id.bind("<<ComboboxSelected>>", lambda event: sincronizar_nom(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas))
     cmb_cuenta_nom.bind("<<ComboboxSelected>>", lambda event: sincronizar_id(event, cmb_cuenta_nom, cmb_cuenta_id, cuentas))
 
-    # Manejar de la selección
     cmb_cuenta_tipo.bind("<<ComboboxSelected>>", lambda event: tipo_cuenta_seleccion(event, cmb_cuenta_tipo, cmb_cuenta_id, cmb_cuenta_nom, tipos_cuenta))
 
     # IsAumento
-    cmb_is_aum = ttk.Combobox(frame, width="3", state="readonly", values=["+", "-"])
-    cmb_is_aum.grid(row=2, column=4)
+    cmb_is_aum = ttk.Combobox(frame, width=3, state="readonly", values=["+", "-"], style="TCombobox")
+    cmb_is_aum.grid(row=2, column=4, padx=5, pady=5)
 
     # Monto
-    label_monto = tk.Label(frame, text="Monto")
-    label_monto.grid(row=1, column=5)
+    label_monto = tk.Label(frame, text="Monto", **label_style)
+    label_monto.grid(row=1, column=5, padx=5, pady=5)
 
-    entry_monto = tk.Entry(frame)
-    entry_monto.grid(row=2, column=5)
+    entry_monto = tk.Entry(frame, bg="#e1ecf7", fg="#1e3d73", borderwidth=2, relief="groove")
+    entry_monto.grid(row=2, column=5, padx=5, pady=5)
 
     # Botón para guardar
-    btn_guardar = tk.Button(frame, text="Guardar", command=lambda: guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, tabla))
-    btn_guardar.grid(row=3, column=5, pady=10)
+    btn_guardar = tk.Button(
+        frame,
+        text="Guardar",
+        command=lambda: guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, tabla),
+        bg="#1e3d73", 
+        fg="white",
+        font=("Arial", 10, "bold"),
+        relief="ridge",
+        padx=10,
+        pady=5
+    )
+    btn_guardar.grid(row=3, column=5, pady=15, padx=10)
