@@ -34,6 +34,10 @@ def mostrar_ver_registro(root, reg_id):
     btn_mayores = tk.Button(root, text="Mostrar Mayores", command=lambda: cambiar_pantalla(root, 'mayores', reg_id))
     btn_mayores.pack(side=tk.LEFT, padx=10)
 
+    btn_balanza = tk.Button(root, text="Balanza de Comprobación", 
+                            command=lambda: cambiar_pantalla(root, 'balanza_comprobacion', reg_id))
+    btn_balanza.pack(side=tk.LEFT, padx=10)
+
     btn_situacion_financiera = tk.Button(root, text="Mostrar Estados Financieros",
                                          command=lambda: cambiar_pantalla(root, 'situacion_financiera', reg_id))
     btn_situacion_financiera.pack(side=tk.LEFT, padx=10)

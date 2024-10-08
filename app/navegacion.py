@@ -9,6 +9,12 @@ def cambiar_pantalla(root, pantalla, *args):
     for widget in root.winfo_children():
         widget.destroy()
 
+    # Eliminar formateo de root
+    root.grid_rowconfigure(0, weight=0)
+    root.grid_rowconfigure(1, weight=0)
+    root.grid_columnconfigure(0, weight=0)
+    root.grid_columnconfigure(1, weight=0)
+
     # Cambiar a la pantalla seleccionada
     if pantalla == 'bienvenida':
         from bienvenida import mostrar_bienvenida
@@ -28,3 +34,6 @@ def cambiar_pantalla(root, pantalla, *args):
     elif pantalla == 'estado_resultados':
         from Estado_Resultados import abrir_estado_resultados
         abrir_estado_resultados(root, *args)
+    elif pantalla == 'balanza_comprobacion':
+        from balanza_comprobacion import generar_balanza
+        generar_balanza(root, *args)

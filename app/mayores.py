@@ -1,25 +1,50 @@
 import tkinter as tk
+import random
 from tkinter import ttk
 from conexion import conectar_db
 from navegacion import cambiar_pantalla
 
-def obtener_mayores():
+def obtener_mayores(reg_id):
     conn = conectar_db()
     cur = conn.cursor()
     cur.execute("""
         SELECT c."Cuenta_Id", c."Cuenta_Nom", t."Tran_Fecha", t."Tran_MontoDeb", t."Tran_MontoCre"
         FROM transacciones t
         JOIN cuentas c ON t."Tran_CuentaId" = c."Cuenta_Id"
+        WHERE t."Tran_RegId" = %s
         ORDER BY c."Cuenta_Nom", t."Tran_Fecha"
-    """)
+    """, (reg_id,))
     mayores = cur.fetchall()
     cur.close()
     conn.close()
     return mayores
 
+def color():
+    colores_predefinidos = [
+    "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige",
+    "bisque", "blanchedalmond", "blue", "cornflowerblue", "cornsilk", 
+    "cyan", "darkorange", "floralwhite", "fuchsia", "gainsboro", 
+    "ghostwhite", "gold", "goldenrod", "gray", "green", 
+    "greenyellow", "honeydew", "hotpink", "ivory", "khaki", 
+    "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue",
+    "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", 
+    "lightgreen", "lightpink", "lightsalmon", "lightyellow", 
+    "magenta", "mediumaquamarine", "mediumblue", "mediumorchid",
+    "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumturquoise",
+    "mediumvioletred", "mintcream", "mistyrose", "moccasin", 
+    "navajowhite", "oldlace", "olive", "orange", "orangered", 
+    "orchid", "palegoldenrod", "palegreen", "paleturquoise", 
+    "palevioletred", "papayawhip", "peachpuff", "pink", 
+    "plum", "powderblue", "rosybrown", "royalblue", "sandybrown", 
+    "seashell", "silver", "skyblue", "slategray", "snow", 
+    "springgreen", "tan", "thistle", "tomato", "turquoise", 
+    "violet", "wheat", "white", "whitesmoke", "yellow", 
+    "yellowgreen"]
+    return random.choice(colores_predefinidos)
 
-def mostrar_mayores(root,reg_id):
-    mayores = obtener_mayores()
+
+def mostrar_mayores(root, reg_id):
+    mayores = obtener_mayores(reg_id)
 
     # Limpiar la ventana
     for widget in root.winfo_children():
@@ -33,49 +58,99 @@ def mostrar_mayores(root,reg_id):
             cuentas[cuenta] = []
         cuentas[cuenta].append(mayor[2:])
 
-    # Crear un canvas con scrollbar
+    # Crear un canvas
     canvas = tk.Canvas(root)
+    canvas.grid(row=1, column=0, sticky="nsew")
+
+    # Crear una barra de desplazamiento para el canvas
     scrollbar = ttk.Scrollbar(root, orient="vertical", command=canvas.yview)
-    scrollable_frame = ttk.Frame(canvas)
+    scrollbar.grid(row=1, column=1, sticky="ns")
 
-    scrollable_frame.bind(
-        "<Configure>",
-        lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-    )
-
-    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+    # Configurar el canvas para funcionar con la barra de desplazamiento
     canvas.configure(yscrollcommand=scrollbar.set)
 
-    # Mostrar cada cuenta
-    for cuenta, movimientos in cuentas.items():
-        frame_cuenta = ttk.Frame(scrollable_frame, relief="raised", borderwidth=1)
-        frame_cuenta.pack(pady=10, padx=10, fill="x")
+    # Crear un Frame dentro del canvas
+    scrollable_frame = ttk.Frame(canvas)
+    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
 
+    # Formateando el root
+    root.grid_rowconfigure(1, weight=1)
+    root.grid_columnconfigure(0, weight=1)
+
+    # Contador de cuentas
+    contador = 0
+
+    # Mostrar el mayor de cada cuenta
+    for cuenta, movimientos in cuentas.items():
+        # Crear un Frame para cada cuenta
+        frame_cuenta = tk.Frame(scrollable_frame, relief="raised", borderwidth=1)
+        frame_cuenta.grid(row=contador, column=0, pady=10, padx=10, sticky="nsew")
+
+        # Buscar nombre de la cuenta
         for i in mayores:
             if i[0] == cuenta:
                 nomcuenta = str(i[0]) + " - " + i[1]
                 break
+        
+        # Colocar Título
+        titulo = ttk.Label(frame_cuenta, background=color(), text=nomcuenta, font=("Arial", 12, "bold"), anchor="center")
+        titulo.grid(row=0, column=0, columnspan=3, sticky="nsew")
 
-        ttk.Label(frame_cuenta, text=nomcuenta, font=("Arial", 12, "bold")).pack()
+        # Crear linea interior
+        linea = tk.Label(frame_cuenta, width=1, bg="black")
+        linea.grid(row=1, column=1, sticky="nsew")
 
         # Crear la tabla de movimientos
-        tabla = ttk.Treeview(frame_cuenta, columns=("Fecha", "Debe", "Haber"), show="headings")
-        tabla.heading("Fecha", text="Fecha")
-        tabla.heading("Debe", text="Debe")
-        tabla.heading("Haber", text="Haber")
+        columns1 = ("Fecha", "Debe")
+        columns2 = ("Haber", "Fecha")
+        tabla1 = ttk.Treeview(frame_cuenta, columns=columns1, show="headings")
+        tabla2 = ttk.Treeview(frame_cuenta, columns=columns2, show="headings")
 
+        # Definir Encabezados
+        tabla1.heading("Fecha", text="Fecha")
+        tabla1.heading("Debe", text="Debe")
+        tabla2.heading("Haber", text="Haber")
+        tabla2.heading("Fecha", text="Fecha")
+
+        # Centrar Contenidos
+        tabla1.column("Fecha", anchor="center")
+        tabla1.column("Debe", anchor="center")
+        tabla2.column("Haber", anchor="center")
+        tabla2.column("Fecha", anchor="center")
+
+        # Calcular saldo e insertar datos a la tabla
         saldo = 0
         for fecha, debe, haber in movimientos:
-            tabla.insert("", "end", values=(fecha.strftime("%d/%m/%Y"), f"{debe:.2f}", f"{haber:.2f}"))
+            if debe != 0:
+                tabla1.insert("", "end", values=(fecha.strftime("%d/%m/%Y"), f"{debe:.2f}"))
+            if haber != 0:
+                tabla2.insert("", "end", values=(f"{haber:.2f}", fecha.strftime("%d/%m/%Y")))
             saldo += debe - haber
 
-        tabla.pack(fill="x")
+        # Ubicar Tabla
+        tabla1.grid(row=1, column=0, sticky="nsew")
+        tabla2.grid(row=1, column=2, sticky="nsew")
+        frame_cuenta.grid_rowconfigure(0, weight=1)
+        frame_cuenta.grid_columnconfigure(0, weight=1)
 
-        ttk.Label(frame_cuenta, text=f"Saldo Final: {saldo:.2f}", font=("Arial", 10, "bold")).pack(anchor="e")
+        # Ubicar saldos
+        if saldo < 0:
+            saldo = saldo * (-1)
+            saldo_neto = tk.Label(frame_cuenta, text=f"Saldo Final: {saldo:.2f}", font=("Arial", 10, "bold"))
+            saldo_neto.grid(row=2, column=2)
+        else:
+            saldo_neto = tk.Label(frame_cuenta, text=f"Saldo Final: {saldo:.2f}", font=("Arial", 10, "bold"))
+            saldo_neto.grid(row=2, column=0)
+        
+        contador += 1
 
-    canvas.pack(side="left", fill="both", expand=True)
-    scrollbar.pack(side="right", fill="y")
+    # Ajustar la región del canvas al contenido
+    scrollable_frame.update_idletasks()
+    canvas.config(scrollregion=canvas.bbox("all"))
 
+    # Título Ventana
+    ventana = tk.Label(root, text="Mayores del registro", font=("Helvetica", 16, "bold"))
+    ventana.grid(row=0, column=0, columnspan=2)
     # Botón para regresar
     btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
-    btn_guardar.pack(pady=10)
+    btn_guardar.grid(row=0, column=2, sticky="e")
