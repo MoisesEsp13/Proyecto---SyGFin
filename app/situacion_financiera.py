@@ -34,7 +34,7 @@ def mostrar_situacion_financiera(root, reg_id):
     conn.close()
 
     # Agregar el título
-    ttk.Label(scrollable_frame, text=f"Estados financieros de {nombre_entidad[0][0]}", font=("Arial", 16, "bold")).pack(pady=10)
+    ttk.Label(scrollable_frame, text=f"Estados financieros de {nombre_entidad[0][0]}", font=("Arial", 16, "bold")).pack(pady=5)
 
     def update_financial_data():
 
@@ -51,6 +51,7 @@ def mostrar_situacion_financiera(root, reg_id):
 			JOIN registros r ON r."Reg_Id" = t."Tran_RegId"
             WHERE r."Reg_Id" = %s AND c."Cuenta_CuentaTipoId" IN (1,2)
             GROUP BY c."Cuenta_CuentaTipoId", c."Cuenta_Id", c."Cuenta_Nom"
+            HAVING NOT SUM(t."Tran_MontoDeb") - SUM(t."Tran_MontoCre")=0
             ORDER BY c."Cuenta_Id", c."Cuenta_Nom"
         """, (reg_id,))  
         activos_corrientes = cur.fetchall()
@@ -70,6 +71,7 @@ def mostrar_situacion_financiera(root, reg_id):
 			JOIN registros r ON r."Reg_Id" = t."Tran_RegId"
             WHERE r."Reg_Id" = %s AND c."Cuenta_CuentaTipoId" = 3
             GROUP BY c."Cuenta_CuentaTipoId", c."Cuenta_Id", c."Cuenta_Nom"
+            HAVING NOT SUM(t."Tran_MontoDeb") - SUM(t."Tran_MontoCre")=0        
             ORDER BY c."Cuenta_Id", c."Cuenta_Nom"
         """, (reg_id,))  
         activos_no_corrientes = cur.fetchall()
@@ -87,16 +89,16 @@ def mostrar_situacion_financiera(root, reg_id):
 
         # Crear un frame para organizar en 2 columnas (1 para activos, 1 para pasivos/patrimonio)
         container_frame = ttk.Frame(scrollable_frame)
-        container_frame.pack(pady=10, padx=10, fill="x")
+        container_frame.pack(pady=5, padx=10, fill="x")
 
         #Nombre
         frame_titulo = ttk.Frame(container_frame, relief="raised", borderwidth=1)
-        frame_titulo.grid(row=0, column=0, padx=10, pady=10, sticky="nsew", columnspan=2)
+        frame_titulo.grid(row=0, column=0, padx=10, pady=5, sticky="nsew", columnspan=2)
         ttk.Label(frame_titulo, text=f"Estados financieros de {nombre_entidad[0][0]}", font=("Arial", 16, "bold")).pack()
 
         # Frame para Activos (Columna izquierda)
-        frame_activos_corrientes = ttk.Frame(container_frame, relief="raised", borderwidth=1)
-        frame_activos_corrientes.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        frame_activos_corrientes = ttk.Frame(container_frame, relief="raised", borderwidth=1, height=50)
+        frame_activos_corrientes.grid(row=1, column=0, padx=10, pady=5, sticky="nsew")
         ttk.Label(frame_activos_corrientes, text="Activos Corrientes", font=("Arial", 12, "bold")).pack()
 
         tabla_activos_corrientes = ttk.Treeview(frame_activos_corrientes, columns=("Nota", "Nombre", "Monto"), show="headings")
@@ -116,8 +118,8 @@ def mostrar_situacion_financiera(root, reg_id):
         ttk.Label(frame_activos_corrientes, text=f"Total de Activos Corrientes: {total_activos_corrientes:.2f}", font=("Arial", 10, "bold")).pack(anchor="e")
 
         # Frame para Activos_no_corrientes (Columna izquierda)
-        frame_activos_no_corrientes = ttk.Frame(container_frame, relief="raised", borderwidth=1)
-        frame_activos_no_corrientes.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        frame_activos_no_corrientes = ttk.Frame(container_frame, relief="raised", borderwidth=1, height=50)
+        frame_activos_no_corrientes.grid(row=2, column=0, padx=10, pady=5, sticky="nsew")
         ttk.Label(frame_activos_no_corrientes, text="Activos No Corrientes", font=("Arial", 12, "bold")).pack()
 
         tabla_activos_no_corrientes = ttk.Treeview(frame_activos_no_corrientes, columns=("Nota", "Nombre", "Monto"), show="headings")
@@ -149,6 +151,7 @@ def mostrar_situacion_financiera(root, reg_id):
 			JOIN registros r ON r."Reg_Id" = t."Tran_RegId"
             WHERE r."Reg_Id" = %s AND c."Cuenta_CuentaTipoId" = 4
             GROUP BY c."Cuenta_Id", c."Cuenta_Nom"
+            HAVING NOT SUM(t."Tran_MontoDeb") - SUM(t."Tran_MontoCre")=0
         """, (reg_id,)) 
         pasivos = cur.fetchall()
         cur.close()
@@ -158,8 +161,8 @@ def mostrar_situacion_financiera(root, reg_id):
         total_pasivos = sum(monto[2] for monto in pasivos)
 
         # Frame para Pasivos (Columna derecha arriba)
-        frame_pasivos = ttk.Frame(container_frame, relief="raised", borderwidth=1)
-        frame_pasivos.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+        frame_pasivos = ttk.Frame(container_frame, relief="raised", borderwidth=1, height=50)
+        frame_pasivos.grid(row=1, column=1, padx=10, pady=5, sticky="nsew")
         ttk.Label(frame_pasivos, text="Pasivos", font=("Arial", 12, "bold")).pack()
 
         tabla_pasivos = ttk.Treeview(frame_pasivos, columns=("Nota", "Nombre", "Monto"), show="headings")
@@ -191,6 +194,7 @@ def mostrar_situacion_financiera(root, reg_id):
 			JOIN registros r ON r."Reg_Id" = t."Tran_RegId"
             WHERE r."Reg_Id" = %s AND c."Cuenta_CuentaTipoId" = 5
             GROUP BY c."Cuenta_Id", c."Cuenta_Nom"
+            HAVING NOT SUM(t."Tran_MontoDeb") - SUM(t."Tran_MontoCre")=0
         """, (reg_id,)) 
         patrimonio = cur.fetchall()
         cur.close()
@@ -201,8 +205,8 @@ def mostrar_situacion_financiera(root, reg_id):
         total_pasivos_y_patrimonio = total_pasivos + total_patrimonio
 
         # Frame para patrimonio (Columna derecha abajo)
-        frame_patrimonio = ttk.Frame(container_frame, relief="raised", borderwidth=1)
-        frame_patrimonio.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")
+        frame_patrimonio = ttk.Frame(container_frame, relief="raised", borderwidth=1, height=50)
+        frame_patrimonio.grid(row=2, column=1, padx=10, pady=5, sticky="nsew")
         ttk.Label(frame_patrimonio, text="Patrimonio", font=("Arial", 12, "bold")).pack()
 
         tabla_patrimonio = ttk.Treeview(frame_patrimonio, columns=("Nota", "Nombre", "Monto"), show="headings")
@@ -221,13 +225,13 @@ def mostrar_situacion_financiera(root, reg_id):
         tabla_patrimonio.pack(fill="x")
         ttk.Label(frame_patrimonio, text=f"Patrimonio total: {total_patrimonio:.2f}", font=("Arial", 10, "bold")).pack(anchor="e")
 
-        #Para ver el total mi vida
+        #Para ver el total
         frame_activos = ttk.Frame(container_frame, relief="raised", borderwidth=1)
-        frame_activos.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+        frame_activos.grid(row=3, column=0, padx=10, pady=5, sticky="nsew")
         ttk.Label(frame_activos, text=f"Total Activos: {total_activos:.2f}", font=("Arial", 12, "bold")).pack()
 
         frame_pas_patr = ttk.Frame(container_frame, relief="raised", borderwidth=1)
-        frame_pas_patr.grid(row=3, column=1, padx=10, pady=10, sticky="nsew")
+        frame_pas_patr.grid(row=3, column=1, padx=10, pady=5, sticky="nsew")
         ttk.Label(frame_pas_patr, text=f"Total Pasivos y Patrimonio: {total_pasivos_y_patrimonio:.2f}", font=("Arial", 12, "bold")).pack()
  
     # Empaquetar canvas y scrollbar
@@ -236,7 +240,7 @@ def mostrar_situacion_financiera(root, reg_id):
 
     # Botón para regresar
     btn_guardar = tk.Button(root, text="Regresar", command=lambda r=reg_id: cambiar_pantalla(root, 'ver_registro', r))
-    btn_guardar.pack(pady=10)
+    btn_guardar.pack(pady=5)
 
     # Actualizar datos por primera vez
     update_financial_data()
