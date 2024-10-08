@@ -176,6 +176,51 @@ def mostrar_situacion_financiera(root, reg_id):
         cur.close()
         conn.close()
 
+        conn = conectar_db()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT 
+                SUM(CASE WHEN c."Cuenta_Id" = 70 THEN t."Tran_MontoCre" ELSE 0 END) AS "VentasNetas",
+                SUM(CASE WHEN c."Cuenta_Id" IN (69, 61, 68) THEN t."Tran_MontoDeb" ELSE 0 END) AS "CostoVenta",
+                SUM(CASE WHEN c."Cuenta_Id" IN (95, 62, 63, 64, 94) THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosOperativos",
+                SUM(CASE WHEN c."Cuenta_Id" = 67 THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosFinancieros",
+                SUM(CASE WHEN c."Cuenta_Id" IN (75, 73, 77) THEN t."Tran_MontoCre" ELSE 0 END) AS "OtrosIngresos",
+                SUM(CASE WHEN c."Cuenta_Id" IN (65, 66) THEN t."Tran_MontoDeb" ELSE 0 END) AS "OtrosGastos"
+            FROM transacciones t
+            JOIN cuentas c ON t."Tran_CuentaId" = c."Cuenta_Id";
+        """)
+
+        # Código para obtener las cifras del estado de resultados
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT 
+                SUM(CASE WHEN c."Cuenta_Id" = 70 THEN t."Tran_MontoCre" ELSE 0 END) AS "VentasNetas",
+                SUM(CASE WHEN c."Cuenta_Id" IN (69, 61, 68) THEN t."Tran_MontoDeb" ELSE 0 END) AS "CostoVenta",
+                SUM(CASE WHEN c."Cuenta_Id" IN (95, 62, 63, 64, 94) THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosOperativos",
+                SUM(CASE WHEN c."Cuenta_Id" = 67 THEN t."Tran_MontoDeb" ELSE 0 END) AS "GastosFinancieros",
+                SUM(CASE WHEN c."Cuenta_Id" IN (75, 73, 77) THEN t."Tran_MontoCre" ELSE 0 END) AS "OtrosIngresos",
+                SUM(CASE WHEN c."Cuenta_Id" IN (65, 66) THEN t."Tran_MontoDeb" ELSE 0 END) AS "OtrosGastos"
+            FROM transacciones t
+            JOIN cuentas c ON t."Tran_CuentaId" = c."Cuenta_Id";
+        """)
+
+        resultado = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        # Verificar y asignar valores
+        ventas_netas_valor = resultado[0] if len(resultado) > 0 and resultado[0] is not None else 0
+        costo_ventas_valor = resultado[1] if len(resultado) > 1 and resultado[1] is not None else 0
+        gastos_operativos_valor = resultado[2] if len(resultado) > 2 and resultado[2] is not None else 0
+        gastos_financieros_valor = resultado[3] if len(resultado) > 3 and resultado[3] is not None else 0
+        otros_ingresos_valor = resultado[4] if len(resultado) > 4 and resultado[4] is not None else 0
+        otros_gastos_valor = resultado[5] if len(resultado) > 5 and resultado[5] is not None else 0
+
+        # Asignar valores a los campos correspondientes
+        utilidad_antes_impuestos_valor = ventas_netas_valor - costo_ventas_valor - gastos_operativos_valor - gastos_financieros_valor + otros_ingresos_valor - otros_gastos_valor
+        patrimonio.append(("-", "Utilidad acumulada", utilidad_antes_impuestos_valor))
+
         # Total pasivos y patrimonio
         total_pasivos = sum(monto[2] for monto in pasivos)
         total_patrimonio = sum(monto[2] for monto in patrimonio)
