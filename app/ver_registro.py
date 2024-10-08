@@ -1,3 +1,4 @@
+import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
 from funciones_trans import *
@@ -9,19 +10,42 @@ def mostrar_ver_registro(root, reg_id):
     # Limpiar la ventana
     for widget in root.winfo_children():
         widget.destroy()
+    
+    conn = conectar_db()
+    cur = conn.cursor()
+    cur.execute("""SELECT "Reg_Nombre" FROM registros WHERE "Reg_Id" = %s""", (reg_id,))  
+    nombre_entidad = cur.fetchall()
+    cur.close()
+    conn.close()
 
     # Título
-    titulo = tk.Label(root, text=f"Transacciones del Registro {reg_id}", font=("Helvetica", 16))
+    titulo = ctk.CTkLabel(root, text=f"Transacciones del Registro {nombre_entidad[0][0]}", 
+                          font=("Helvetica", 30, "bold"), text_color="#2B6CB0")
     titulo.pack(pady=10)
 
     # Tabla de transacciones
     transacciones = obtener_transacciones(reg_id)
+    
+    estilo = ttk.Style()
+    estilo.theme_use('clam')
+    estilo.configure("Treeview", background="#2E2E2E", foreground="white", 
+                     fieldbackground="#2E2E2E", rowheight=25)
+    estilo.configure("Treeview.Heading", background="#1C1C1C", foreground="white")
+
+    # Crear tabla
     tabla = ttk.Treeview(root, columns=("Fecha", "Cuenta", "Debe", "Haber"), show="headings")
     tabla.heading("Fecha", text="Fecha")
     tabla.heading("Cuenta", text="Cuenta")
     tabla.heading("Debe", text="Debe")
     tabla.heading("Haber", text="Haber")
 
+    # Ajustar ancho
+    tabla.column("Fecha", width=90, anchor="center")
+    tabla.column("Cuenta", width=350)
+    tabla.column("Debe", width=120, anchor="center") 
+    tabla.column("Haber", width=120, anchor="center")
+
+    # Insertar los datos en la tabla
     for trans in transacciones:
         tabla.insert("", "end", values=trans)
 
@@ -31,21 +55,27 @@ def mostrar_ver_registro(root, reg_id):
     agregar_transaccion(root, reg_id, tabla)
 
     # Botones
-    btn_mayores = tk.Button(root, text="Mostrar Mayores", command=lambda: cambiar_pantalla(root, 'mayores', reg_id))
-    btn_mayores.pack(side=tk.LEFT, padx=10)
+    btn_mayores = ctk.CTkButton(root, text="Mostrar Mayores", 
+                                command=lambda: cambiar_pantalla(root, 'mayores', reg_id),
+                                fg_color="#4A5568", hover_color="#2D3748", text_color="white")
+    btn_mayores.pack(side=ctk.LEFT, padx=10)
 
-    btn_situacion_financiera = tk.Button(root, text="Mostrar Estados Financieros",
-                                         command=lambda: cambiar_pantalla(root, 'situacion_financiera', reg_id))
-    btn_situacion_financiera.pack(side=tk.LEFT, padx=10)
+    btn_situacion_financiera = ctk.CTkButton(root, text="Mostrar Estados Financieros",
+                                             command=lambda: cambiar_pantalla(root, 'situacion_financiera', reg_id),
+                                             fg_color="#4A5568", hover_color="#2D3748", text_color="white")
+    btn_situacion_financiera.pack(side=ctk.LEFT, padx=10)
 
     # Botón para abrir el estado de resultados
-    btn_estado_resultados = tk.Button(root, text="Ver Estado de Resultados",
-                                      command=lambda: cambiar_pantalla(root, 'estado_resultados', reg_id))
-    btn_estado_resultados.pack(side=tk.LEFT, padx=10)
+    btn_estado_resultados = ctk.CTkButton(root, text="Ver Estado de Resultados",
+                                          command=lambda: cambiar_pantalla(root, 'estado_resultados', reg_id),
+                                          fg_color="#4A5568", hover_color="#2D3748", text_color="white")
+    btn_estado_resultados.pack(side=ctk.LEFT, padx=10)
 
     # Botón para regresar
-    btn_regresar = tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'bienvenida'))
-    btn_regresar.pack(side=tk.LEFT, padx=10)
+    btn_regresar = ctk.CTkButton(root, text="Regresar", 
+                                 command=lambda: cambiar_pantalla(root, 'bienvenida'),
+                                 fg_color="#4A5568", hover_color="#2D3748", text_color="white")
+    btn_regresar.pack(side=ctk.LEFT, padx=10)
 
 
 def guardar_datos(reg_id, cmb_cuenta_id, cmb_is_aum, entry_monto, entry_fecha, tabla):
