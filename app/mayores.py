@@ -158,7 +158,8 @@ def mostrar_mayores(root, reg_id):
     canvas.config(scrollregion=canvas.bbox("all"))
 
     # Título Ventana
-    ventana = ctk.CTkLabel(root, text="Mayores del registro", font=("Helvetica", 20, "bold"), text_color="#2B6CB0")
+    ventana = ctk.CTkLabel(root, text="Mayores del registro", font=("Helvetica", 20, "bold"), 
+                           text_color="#2B6CB0")
     ventana.grid(row=0, column=0, columnspan=2, pady=10)
 
     # Botón para regresar
