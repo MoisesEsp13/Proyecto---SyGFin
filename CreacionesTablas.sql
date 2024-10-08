@@ -64,39 +64,3 @@ CREATE TABLE transacciones
 	FOREIGN KEY ("Tran_CuentaId") REFERENCES cuentas("Cuenta_Id")
 );
 
-
--- TABLAS PARA MAYORES
-
-CREATE TABLE mayores
-(
-    "May_Id" SERIAL PRIMARY KEY,
-	"May_RegId" INTEGER,
-	"May_CuentaId" SMALLINT,
-	"May_MontoDeb" NUMERIC(15, 2) DEFAULT 0,
-	"May_MontoCre" NUMERIC(15, 2) DEFAULT 0,
-	FOREIGN KEY ("May_RegId") REFERENCES registros("Reg_Id"),
-	FOREIGN KEY ("May_CuentaId") REFERENCES cuentas("Cuenta_Id")
-);
-
--- TABLAS PARA ESTADO DE RESULTADO
-
-CREATE TABLE estado_resultados
-(
-    "EstRes_Id" SERIAL PRIMARY KEY,
-	"EstRes_RegId" INTEGER,
-	"EstRes_Venta" NUMERIC(15, 2),
-    "EstRes_CostoVenta" NUMERIC(15, 2),
-    "EstRes_UtilidadBruta" NUMERIC(15, 2),
-    "EstRes_GastosVenta" NUMERIC(15, 2),
-    "EstRes_GastosAdmi" NUMERIC(15, 2),
-    "EstRes_UtilidadOper" NUMERIC(15, 2),
-    "EstRes_OtrosIngresosGastos" NUMERIC(15, 2),
-    "EstRes_GastosFinancieros" NUMERIC(15, 2),
-    "EstRes_UtilidadAnteImpuestos" NUMERIC(15, 2),
-    "EstRes_ParticipacionTrab" NUMERIC(15, 2),
-    "EstRes_ImpuestoRentaGanancia" NUMERIC(15, 2),
-    "EstRes_UtilidadNeta" NUMERIC(15, 2),
-	FOREIGN KEY ("EstRes_RegId") REFERENCES registros("Reg_Id")
-);
-
-
