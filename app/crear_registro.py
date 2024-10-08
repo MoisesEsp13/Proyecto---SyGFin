@@ -1,5 +1,4 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
 from conexion import conectar_db
 from navegacion import cambiar_pantalla
 
@@ -12,7 +11,7 @@ def guardar_registro(moneda, nombre, cmb_moneda, entry_nombre):
     conn.close()
 
     cmb_moneda.set('')
-    entry_nombre.delete(0, tk.END)
+    entry_nombre.delete(0, ctk.END)
 
 def mostrar_crear_registro(root):
     # Limpiar la ventana
@@ -20,26 +19,35 @@ def mostrar_crear_registro(root):
         widget.destroy()
 
     # Título
-    titulo = tk.Label(root, text="Crear Nuevo Registro", font=("Helvetica", 16))
-    titulo.pack(pady=10)
+    titulo = ctk.CTkLabel(root, text="Crear Nuevo Registro", 
+                          font=("Helvetica", 24, "bold"), text_color="#2B6CB0")
+    titulo.pack(pady=20)
 
     # Moneda
     monedas = {"Soles S/.": 1, "Dólares $": 2}
-    label_moneda = tk.Label(root, text="Moneda")
-    label_moneda.pack()
-    cmb_moneda = ttk.Combobox(root, values=list(monedas.keys()), state="readonly")
-    cmb_moneda.pack()
+    label_moneda = ctk.CTkLabel(root, text="Moneda", font=("Helvetica", 14), text_color="#2D3748")
+    label_moneda.pack(pady=5)
+    
+    cmb_moneda = ctk.CTkComboBox(root, values=list(monedas.keys()), state="readonly")
+    cmb_moneda.pack(pady=10)
 
-    # Saldo inicial
-    label_nombre = tk.Label(root, text="Nombre")
-    label_nombre.pack()
-    entry_nombre = tk.Entry(root, width=50)
-    entry_nombre.pack()
+    # Nombre
+    label_nombre = ctk.CTkLabel(root, text="Nombre", font=("Helvetica", 14), text_color="#2D3748")
+    label_nombre.pack(pady=5)
+    
+    entry_nombre = ctk.CTkEntry(root, width=300)
+    entry_nombre.pack(pady=10)
 
     # Botón para guardar
-    btn_guardar = tk.Button(root, text="Guardar", command=lambda: guardar_registro(monedas[cmb_moneda.get()], entry_nombre.get(),cmb_moneda,entry_nombre))
-    btn_guardar.pack(pady=10)
+    btn_guardar = ctk.CTkButton(root, text="Guardar",
+                                command=lambda: guardar_registro(monedas[cmb_moneda.get()], entry_nombre.get(), cmb_moneda, entry_nombre),
+                                font=("Helvetica", 16),
+                                fg_color="#4A5568", hover_color="#2C5282")
+    btn_guardar.pack(pady=15)
 
     # Botón para regresar
-    btn_guardar = tk.Button(root, text="Regresar", command=lambda: cambiar_pantalla(root, 'bienvenida'))
-    btn_guardar.pack(pady=10)
+    btn_regresar = ctk.CTkButton(root, text="Regresar", 
+                                 command=lambda: cambiar_pantalla(root, 'bienvenida'),
+                                 font=("Helvetica", 16),
+                                 fg_color="#A0AEC0", hover_color="#718096")
+    btn_regresar.pack(pady=10)

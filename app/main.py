@@ -1,8 +1,11 @@
-import tkinter as tk
+import customtkinter as ctk
 from navegacion import cambiar_pantalla
 
 def main():
-    root = tk.Tk()
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("blue")
+
+    root = ctk.CTk()
     root.title("Sistema Contable")
     root.geometry("900x600")
 
