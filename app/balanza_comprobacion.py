@@ -36,14 +36,7 @@ def generar_balanza(root, reg_id):
     # Etiquetas de título
     titulo = ctk.CTkLabel(root, text="Balanza de Comprobación", font=("Helvetica", 20, "bold"), text_color="#2B6CB0")
     titulo.grid(row=0, column=1, pady=(10, 0))
-
-    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
-    aviso = ctk.CTkLabel(root, text="Balanza a la fecha:", font=("Helvetica", 12, "bold"))
-    aviso.grid(row=1, column=1)
-
-    fecha = ctk.CTkLabel(root, text=datetime.date.today().strftime("%d de %B de %Y"), font=("Helvetica", 12, "bold"))
-    fecha.grid(row=2, column=1)
-
+    
     # Tabla de Balanza
     columnas = ("N", "Titulo", "Debe", "Haber")
     tabla = ttk.Treeview(root, columns=columnas, show="headings", height=10)
